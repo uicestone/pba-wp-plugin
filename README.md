@@ -14,7 +14,7 @@ Response Body:
 
 获取纪念日人数和占比
 ---
-GET `jddj/v1/user-count/:dateType/:mm-:dd`
+GET `jddj/v1/user-count/:dateType/:mm/:dd`
 
 `:dateType`: birth 生日 | enroll 入党日 | memo 纪念日
 
@@ -79,7 +79,7 @@ Response Body:
 
 上传座右铭
 ---
-POST `jddj/v1/mottos`
+POST `jddj/v1/mottoes`
 
 Request Body: (form-data)
 - text
@@ -98,7 +98,7 @@ Response Body:
 
 获得座右铭
 ---
-GET `jddj/v1/mottos/:id`
+GET `jddj/v1/mottoes/:id`
 
 Response Body: 
 ```json
@@ -112,7 +112,7 @@ Response Body:
 
 获得座右铭列表
 ---
-GET `jddj/v1/mottos`
+GET `jddj/v1/mottoes`
 
 Response Body: 
 ```json
