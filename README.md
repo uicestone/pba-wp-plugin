@@ -3,7 +3,7 @@ Server APIs
 
 获取党史上的这一天
 ---
-GET `/jddj/v1/cpc-review/:mm-:dd`
+GET `/jddj/v1/cpc-review/:dateType/:mm-:dd`
 
 Response Body: 
 ```json
