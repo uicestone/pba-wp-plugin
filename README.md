@@ -169,6 +169,6 @@ Response Body:
 	"phone":"",
 	"wechatPublicName":"",
 	"desc":"<p>...</p>...",
-	"liveVideo":false
+	"liveVideoUrl":""
 }
 ```

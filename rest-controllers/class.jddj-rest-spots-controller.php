@@ -28,6 +28,30 @@ class JDDJ_REST_Spot_Controller extends WP_REST_Controller {
 	 */
 	public static function get_spots( $request ) {
 
+		$posts = get_posts(array('post_type' => 'spot', 'posts_per_page' => -1));
+
+		$spots = array_map(function (WP_Post $post) {
+
+			$spot = array(
+				'id' => $post->ID,
+				'type' => get_post_meta($post->ID, 'type', true),
+				'name' => get_the_title($post->ID),
+				'town' => get_post_meta($post->ID, 'town', true),
+				'address' => get_post_meta($post->ID, 'address', true),
+				'latitude' => (double) get_post_meta($post->ID, 'latitude', true),
+				'longitude' => (double) get_post_meta($post->ID, 'longitude', true),
+				'contact' => get_post_meta($post->ID, 'contact', true),
+				'phone' => get_post_meta($post->ID, 'phone', true),
+				'wechatPublicName' => get_post_meta($post->ID, 'wechat_public_name', true),
+				'desc' => wpautop($post->post_content),
+				'liveVideoUrl' => get_post_meta($post->ID, 'live_video_url', true)
+			);
+
+			return (object) $spot;
+
+		}, $posts);
+
+		return rest_ensure_response($spots);
 	}
 
 }
