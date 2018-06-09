@@ -60,8 +60,9 @@ class JDDJ_REST_Motto_Controller extends WP_REST_Controller {
 		$mottoes = array_map(function (WP_Post $post) {
 			$motto = array(
 				'id' => $post->ID,
-				'bgid' => get_post_meta($post->ID, 'bgid', true),
-				'audioUrl' => get_post_meta($post->ID, 'audio_url', true)
+				'text' => $post->post_content,
+				'authorName' => get_post_meta($post->ID, 'author_name', true),
+				'imageUrl' => get_post_meta($post->ID, 'image_url', true)
 			);
 			return (object) $motto;
 		}, $posts);
@@ -81,11 +82,15 @@ class JDDJ_REST_Motto_Controller extends WP_REST_Controller {
 
 		$files =  $request->get_file_params();
 		$body = $request->get_body_params();
-		$author_name = $body['author_name'];
+		$author_name = $body['authorName'];
 		$text = $body['text'];
 
 		if (!$author_name) {
 			return rest_ensure_response(new WP_Error(400, 'Invalid author name.', $author_name));
+		}
+
+		if (!$text) {
+			return rest_ensure_response(new WP_Error(400, 'Empty text.'));
 		}
 
 		$file = wp_handle_upload($files['image'], array('test_form' => false));
@@ -97,7 +102,7 @@ class JDDJ_REST_Motto_Controller extends WP_REST_Controller {
 		}
 
 		$motto_id = wp_insert_post(array(
-			'post_type' => 'speech',
+			'post_type' => 'motto',
 			'post_title' => '我的座右铭',
 			'post_name' => 'motto'  . '-' . time(),
 			'post_content' => $text,
@@ -112,8 +117,9 @@ class JDDJ_REST_Motto_Controller extends WP_REST_Controller {
 		return rest_ensure_response(array(
 			'id' => $motto_id,
 			'text' => $motto->post_content,
-			'imageUrl' => $file['url'],
 			'authorName' => $author_name,
+			'imageUrl' => $file['url'],
+			'qrcodeUrl' => ''
 		));
 	}
 
@@ -143,5 +149,5 @@ class JDDJ_REST_Motto_Controller extends WP_REST_Controller {
 	public static function delete_motto( $request ) {
 
 	}
-	
+
 }

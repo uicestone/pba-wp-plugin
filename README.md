@@ -116,7 +116,8 @@ Response Body:
 	"id":"",
 	"text":"",
 	"imageUrl":"",
-	"authorName":""
+	"authorName":"",
+	"qrcodeUrl":""
 }
 ```
 
