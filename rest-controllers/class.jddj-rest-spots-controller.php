@@ -44,6 +44,9 @@ class JDDJ_REST_Spot_Controller extends WP_REST_Controller {
 				'phone' => get_post_meta($post->ID, 'phone', true),
 				'wechatPublicName' => get_post_meta($post->ID, 'wechat_public_name', true),
 				'desc' => wpautop($post->post_content),
+				'images' => array_map(function ($attachment) {
+					return wp_get_attachment_url($attachment->ID);
+				}, array_values(get_attached_media('image', $post))),
 				'liveVideoUrl' => get_post_meta($post->ID, 'live_video_url', true)
 			);
 
