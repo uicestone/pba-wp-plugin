@@ -70,6 +70,8 @@ Response Body:
 ---
 POST `jddj/v1/speeches/:speechType`
 
+- `:speechType`: movie|talk
+
 Request Body: (form-data)
 - type
 - bgid
@@ -79,7 +81,6 @@ Response Body:
 ```json
 {
 	"id":"",
-	"type":"movie|talk",
 	"bgid":"",
 	"audioUrl":"",
 	"qrcodeUrl":""
