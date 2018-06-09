@@ -62,7 +62,8 @@ Response Body:
 	"id":"",
 	"type":"movie|talk",
 	"bgid":"",
-	"audioUrl":""
+	"audioUrl":"",
+	"authorName":""
 }]
 ```
 
@@ -97,7 +98,8 @@ Response Body:
 	"id":"",
 	"type":"movie|talk",
 	"bgid":"",
-	"audioUrl":""
+	"audioUrl":"",
+	"authorName":""
 }
 ```
 

@@ -66,7 +66,8 @@ class JDDJ_REST_Speech_Controller extends WP_REST_Controller {
 				'id' => $post->ID,
 				'type' => $type,
 				'bgid' => get_post_meta($post->ID, 'bgid', true),
-				'audioUrl' => get_post_meta($post->ID, 'audio_url', true)
+				'audioUrl' => get_post_meta($post->ID, 'audio_url', true),
+				'authorName' => ''
 			);
 			return (object) $speech;
 		}, $posts);
@@ -143,7 +144,8 @@ class JDDJ_REST_Speech_Controller extends WP_REST_Controller {
 			'id' => $post->ID,
 			'type' => get_post_meta($post->ID, 'type', true),
 			'bgid' => get_post_meta($post->ID, 'bgid', true),
-			'audioUrl' => get_post_meta($post->ID, 'audio_url', true)
+			'audioUrl' => get_post_meta($post->ID, 'audio_url', true),
+			'authorName' => ''
 		);
 
 		return rest_ensure_response((object) $speech);
