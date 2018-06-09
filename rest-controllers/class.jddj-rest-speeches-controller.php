@@ -33,7 +33,41 @@ class JDDJ_REST_Speech_Controller extends WP_REST_Controller {
 	 * @return WP_Error|WP_REST_Response
 	 */
 	public static function get_speeches( $request ) {
+		$type = $request->get_param('type');
+		if (!in_array($type, array('talk', 'movie'))) {
+			return rest_ensure_response(new WP_Error(400, 'Invalid speech type.', $type));
+		}
 
+		$parameter_mappings = array (
+			'page' => 'paged',
+			'limit' => 'posts_per_page',
+		);
+
+		$parameters = array();
+
+		foreach ($parameter_mappings as $param => $mapped_param) {
+			if ($request->get_param($param) != null) {
+				$parameters[$mapped_param] = $request->get_param($param);
+			}
+		}
+
+		$parameters['post_type'] = 'speech';
+		$parameters['meta_key'] = 'type';
+		$parameters['meta_value'] = $type;
+
+		$posts = get_posts($parameters);
+
+		$speeches = array_map(function (WP_Post $post) use ($type) {
+			$speech = array(
+				'id' => $post->ID,
+				'type' => $type,
+				'bgid' => get_post_meta($post->ID, 'bgid', true),
+				'audioUrl' => get_post_meta($post->ID, 'audio_url', true)
+			);
+			return (object) $speech;
+		}, $posts);
+
+		return rest_ensure_response($speeches);
 	}
 
 	/**

@@ -54,7 +54,7 @@ Response Body:
 
 获取党建声音列表
 ---
-GET `jddj/v1/speeches/:speechType`
+GET `jddj/v1/speeches/:speechType?page=:page&limit=:limit`
 
 Response Body: 
 ```json
@@ -136,7 +136,7 @@ Response Body:
 
 获得座右铭列表
 ---
-GET `jddj/v1/mottoes`
+GET `jddj/v1/mottoes?page=:page&limit=:limit`
 
 Response Body: 
 ```json
