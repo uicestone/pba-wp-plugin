@@ -37,6 +37,20 @@ class JDDJ_Admin {
 			'menu_icon' => 'dashicons-clipboard',
 			'has_archive' => true
 		));
+
+		register_post_type('spot', array(
+			'label' => '地图点',
+			'labels' => array(
+				'all_items' => '所有地图点',
+				'add_new' => '添加地图点',
+				'add_new_item' => '新地图点',
+				'not_found' => '未找到地图点'
+			),
+			'public' => true,
+			'supports' => array('title', 'editor'),
+			'menu_icon' => 'dashicons-location-alt',
+			'has_archive' => true
+		));
 	}
 
 	protected static function manage_admin_columns () {
@@ -82,6 +96,43 @@ class JDDJ_Admin {
 				case 'image' :
 					$image_url = get_post_meta($post->ID, 'image_url', true);
 					echo '<a href="' . $image_url . '" target="_blank">' . basename($image_url) . '</a>';
+					break;
+				default;
+			}
+		});
+
+		add_filter('manage_spot_posts_columns', function($columns) {
+			$columns['type'] = '类型';
+			$columns['town'] = '所属街镇';
+			$columns['contact'] = '联系人';
+			$columns['phone'] = '电话';
+			$columns['address'] = '地址';
+			unset($columns['date']);
+			return $columns;
+		});
+
+		add_action('manage_spot_posts_custom_column', function($column_name) {
+			global $post;
+			switch ($column_name ) {
+				case 'type' :
+					$type = get_post_meta($post->ID, 'type', true);
+					echo $type;
+					break;
+				case 'town' :
+					$town = get_post_meta($post->ID, 'town', true);
+					echo $town;
+					break;
+				case 'contact' :
+					$contact = get_post_meta($post->ID, 'contact', true);
+					echo $contact;
+					break;
+				case 'phone' :
+					$phone = get_post_meta($post->ID, 'phone', true);
+					echo $phone;
+					break;
+				case 'address' :
+					$address = get_post_meta($post->ID, 'address', true);
+					echo $address;
 					break;
 				default;
 			}
