@@ -1,6 +1,29 @@
 Server APIs
 ===
 
+获取文章列表
+---
+GET `/jddj/v1/posts/?category=:slug`
+
+Response Body: 
+```json
+{
+  "id":"",
+  "title":"",
+  "excerpt":"",
+  "content":"",
+  "status":"",
+  "slug":"",
+  "author":{
+    "id":"",
+    "name":"",
+    "roles":[]
+  },
+  "createdAt":"",
+  "updatedAt":""
+}
+```
+
 获取党史上的这一天
 ---
 GET `/jddj/v1/cpc-review/:dateType/:mm-:dd`
@@ -74,7 +97,7 @@ Response Body:
 	"type":"movie|talk",
 	"bgid":"",
 	"audioUrl":""
-
+}
 ```
 
 上传座右铭
