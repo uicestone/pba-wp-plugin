@@ -12,7 +12,7 @@ class JDDJ_CLI extends WP_CLI_Command {
 	 *
 	 * ## EXAMPLES
 	 *
-	 *     wp jddj download-review
+	 *     wp jddj download_review
 	 *
 	 */
 	public function download_review() {
@@ -46,10 +46,10 @@ class JDDJ_CLI extends WP_CLI_Command {
 	 *
 	 * ## EXAMPLES
 	 *
-	 *     wp jddj download-review
+	 *     wp jddj import_spots
 	 *
 	 */
-	public function convert_spots() {
+	public function import_spots() {
 		global $wpdb;
 		$spots = $wpdb->get_results("select * from `_spots` where `名称` != ''");
 		foreach ($spots as $spot) {
@@ -83,11 +83,60 @@ class JDDJ_CLI extends WP_CLI_Command {
 				if (!$value) {
 					continue;
 				}
+
+				if ($key === 'address') {
+					$value = preg_replace('/^嘉定区/', '', $value);
+				}
+
 				add_post_meta($post_id, $key, $value);
 			}
 
 			WP_CLI::line( 'Inserted ' . $type . ': ' . $name . ' to post ' . $post_id . '.');
 
+		}
+	}
+
+	/**
+	 * Find latitude and longitude of a spot by address.
+	 *
+	 * ## EXAMPLES
+	 *
+	 *     wp jddj find_spots_lat_long
+	 *
+	 */
+	public function find_spots_lat_long() {
+		$spots = get_posts(array('post_type' => 'spot', 'posts_per_page' => -1));
+
+		foreach ($spots as $spot) {
+			$address = get_post_meta($spot->ID, 'address', true);
+
+			if (!$address) {
+				WP_CLI::line( 'No address found for ' . $spot->ID . ' ' . $spot->post_title);
+				continue;
+			}
+
+			$result_string = file_get_contents('http://restapi.amap.com/v3/geocode/geo?key=' . constant('AMAP_KEY') . '&address=' . urlencode('嘉定区' . $address) . '&city=' . urlencode('上海'));
+			$result = json_decode($result_string);
+
+			if (count($result->geocodes) > 1) {
+				WP_CLI::line( 'Multiple results found for ' . $spot->ID . ' ' . $spot->post_title);
+				continue;
+			}
+
+			if (count($result->geocodes) === 0) {
+				WP_CLI::line( 'No results found for ' . $spot->ID . ' ' . $spot->post_title);
+				continue;
+			}
+
+			$location = $result->geocodes[0]->location;
+
+			$latitude = explode(',', $location)[1];
+			$longitude = explode(',', $location)[0];
+
+			update_post_meta($spot->ID, 'latitude', $latitude);
+			update_post_meta($spot->ID, 'longitude', $longitude);
+
+			WP_CLI::line( 'Location saved ' . $latitude . ',' . $longitude . ' ' . $spot->ID . ' ' . $spot->post_title . '.');
 		}
 	}
 }
