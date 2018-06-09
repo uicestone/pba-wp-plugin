@@ -133,6 +133,10 @@ class JDDJ_REST_Motto_Controller extends WP_REST_Controller {
 
 		$post = get_post($id);
 
+		if (!$post || $post->post_type !== 'motto') {
+			return rest_ensure_response(new WP_Error(404, 'Not found.', $id));
+		}
+
 		$motto = array(
 			'id' => $id,
 			'text' => $post->post_content,

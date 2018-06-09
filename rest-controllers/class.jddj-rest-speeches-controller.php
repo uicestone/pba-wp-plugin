@@ -135,6 +135,10 @@ class JDDJ_REST_Speech_Controller extends WP_REST_Controller {
 
 		$post = get_post($id);
 
+		if (!$post || $post->post_type !== 'speech') {
+			return rest_ensure_response(new WP_Error(404, 'Not found.', $id));
+		}
+
 		$speech = array(
 			'id' => $post->ID,
 			'type' => get_post_meta($post->ID, 'type', true),
