@@ -12,7 +12,7 @@ class JDDJ_REST_Speech_Controller extends WP_REST_Controller {
 	 */
 	public function register_routes() {
 
-		register_rest_route( $this->namespace, '/' . $this->rest_base . '/(?P<type>.*)', array(
+		register_rest_route( $this->namespace, '/' . $this->rest_base . '/(?P<type>movie|talk)', array(
 			array(
 				'methods' => WP_REST_Server::READABLE,
 				'callback' => array( $this, 'get_speeches' ),
@@ -22,6 +22,13 @@ class JDDJ_REST_Speech_Controller extends WP_REST_Controller {
 			), array(
 				'methods' => WP_REST_Server::DELETABLE,
 				'callback' => array( $this, 'delete_speech' ),
+			)
+		) );
+
+		register_rest_route( $this->namespace, '/' . $this->rest_base . '/(?P<id>.+)', array(
+			array(
+				'methods' => WP_REST_Server::READABLE,
+				'callback' => array( $this, 'get_speech' ),
 			)
 		) );
 	}
@@ -34,9 +41,6 @@ class JDDJ_REST_Speech_Controller extends WP_REST_Controller {
 	 */
 	public static function get_speeches( $request ) {
 		$type = $request->get_param('type');
-		if (!in_array($type, array('talk', 'movie'))) {
-			return rest_ensure_response(new WP_Error(400, 'Invalid speech type.', $type));
-		}
 
 		$parameter_mappings = array (
 			'page' => 'paged',
@@ -91,10 +95,6 @@ class JDDJ_REST_Speech_Controller extends WP_REST_Controller {
 			return rest_ensure_response(new WP_Error(400, 'Invalid bgid.', $bgid));
 		}
 
-		if (!in_array($type, array('talk', 'movie'))) {
-			return rest_ensure_response(new WP_Error(400, 'Invalid speech type.', $type));
-		}
-
 		$file = wp_handle_upload($files['audio'], array('test_form' => false));
 
 		if ( $file && empty( $file['error'] ) ) {
@@ -121,6 +121,28 @@ class JDDJ_REST_Speech_Controller extends WP_REST_Controller {
 			'audioUrl' => $file['url'],
 			'qrcodeUrl' => ''
 		));
+	}
+
+	/**
+	 * Get single Speech to CPC
+	 *
+	 * @param WP_REST_Request $request
+	 * @return WP_Error|WP_REST_Response
+	 */
+	public static function get_speech( $request ) {
+
+		$id = $request->get_param('id');
+
+		$post = get_post($id);
+
+		$speech = array(
+			'id' => $post->ID,
+			'type' => get_post_meta($post->ID, 'type', true),
+			'bgid' => get_post_meta($post->ID, 'bgid', true),
+			'audioUrl' => get_post_meta($post->ID, 'audio_url', true)
+		);
+
+		return rest_ensure_response((object) $speech);
 	}
 
 	/**
