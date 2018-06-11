@@ -44,7 +44,7 @@ class JDDJ_REST_Post_Controller extends WP_REST_Controller {
 
 		if ($month = $request->get_param('month')) {
 			$parameters['meta_query'] = array(
-				array('key' => 'date', 'compare' => 'like', 'value' => $month . '%')
+				array('key' => 'date', 'compare' => 'LIKE', 'value' => $month)
 			);
 		}
 
