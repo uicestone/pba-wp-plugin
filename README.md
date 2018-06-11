@@ -14,6 +14,8 @@ Response Body:
   "content":"",
   "status":"",
   "slug":"",
+  "posterUrl":"",
+  "categories":[""],
   "author":{
     "id":"",
     "name":"",
