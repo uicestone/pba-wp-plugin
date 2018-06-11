@@ -3,7 +3,10 @@ Server APIs
 
 获取文章列表
 ---
-GET `/jddj/v1/posts/?category=:slug`
+GET `/jddj/v1/posts/?category=:slug&month=:yearMonth`
+
+`:slug`: 可选，category名称
+`:yearMonth`: 可选，请求月度菜单数据时筛选月份
 
 Response Body: 
 ```json
