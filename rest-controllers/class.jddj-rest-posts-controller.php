@@ -46,6 +46,15 @@ class JDDJ_REST_Post_Controller extends WP_REST_Controller {
 
 		$items = array_map(function (WP_Post $post) {
 			$author = get_user_by('ID', $post->post_author);
+			$town_category = get_category_by_slug('town');
+			$town = null;
+			$categories = array_map(function ($category) use (&$town, $town_category) {
+				if ($category->parent = $town_category->cat_ID) {
+					$town = $category->name;
+				}
+				return $category->name;
+			}, get_the_category($post->ID));
+
 			$item = array(
 				'id' => $post->ID,
 				'title' => get_the_title($post->ID),
@@ -54,9 +63,8 @@ class JDDJ_REST_Post_Controller extends WP_REST_Controller {
 				'status' => $post->post_status,
 				'slug' => $post->post_name,
 				'posterUrl' => get_the_post_thumbnail_url($post->ID) ?: null,
-				'categories' => array_map(function ($category) {
-					return $category->name;
-				}, get_the_category($post->ID)),
+				'categories' => $categories,
+				'town' => $town,
 				'author' => (object) array(
 					'id' => $author->ID,
 					'name' => $author->display_name,
@@ -65,7 +73,13 @@ class JDDJ_REST_Post_Controller extends WP_REST_Controller {
 				'createdAt' => $post->post_date,
 				'updatedAt' => $post->post_modified
 			);
+
+			if (in_array('月度菜单', $categories)) {
+				$item['date'] = get_post_meta($post->ID, 'date', true);
+			}
+
 			return (object) $item;
+
 		}, $posts);
 
 		return rest_ensure_response($items);

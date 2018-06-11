@@ -16,6 +16,8 @@ Response Body:
   "slug":"",
   "posterUrl":"",
   "categories":[""],
+  "town":"",
+  "date":"2018-01-01", // 仅当categories包含"月度菜单"时有此属性
   "author":{
     "id":"",
     "name":"",
