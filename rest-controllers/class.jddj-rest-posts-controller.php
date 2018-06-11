@@ -53,6 +53,10 @@ class JDDJ_REST_Post_Controller extends WP_REST_Controller {
 				'content' => wpautop($post->post_content),
 				'status' => $post->post_status,
 				'slug' => $post->post_name,
+				'posterUrl' => get_the_post_thumbnail_url($post->ID) ?: null,
+				'categories' => array_map(function ($category) {
+					return $category->name;
+				}, get_the_category($post->ID)),
 				'author' => (object) array(
 					'id' => $author->ID,
 					'name' => $author->display_name,
