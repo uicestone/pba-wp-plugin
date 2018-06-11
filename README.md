@@ -28,7 +28,7 @@ Response Body:
 
 获取附件列表
 ---
-GET `/jddj/v1/posts/?category=:slug`
+GET `/jddj/v1/attachments/?category=:slug`
 
 Response Body: 
 ```json
