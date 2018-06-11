@@ -26,6 +26,24 @@ Response Body:
 }
 ```
 
+获取附件列表
+---
+GET `/jddj/v1/posts/?category=:slug`
+
+Response Body: 
+```json
+{
+  "id":"",
+  "title":"",
+  "type":"image|video|audio",
+  "mime":"image/jpeg|video/mp4|audio/mp3...",
+  "url":"",
+  "categories":[""],
+  "createdAt":"",
+  "updatedAt":""
+}
+```
+
 获取党史上的这一天
 ---
 GET `/jddj/v1/cpc-review/:dateType/:mm-:dd`

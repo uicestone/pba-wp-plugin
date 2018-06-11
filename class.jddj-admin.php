@@ -10,6 +10,9 @@ class JDDJ_Admin {
 
 	protected static function register_post_types () {
 
+		register_taxonomy_for_object_type('category', 'attachment');
+		register_taxonomy_for_object_type('post_tag', 'attachment');
+
 		register_post_type('speech', array(
 			'label' => '党建声音',
 			'labels' => array(
