@@ -50,7 +50,7 @@ class JDDJ_REST_Post_Controller extends WP_REST_Controller {
 				'id' => $post->ID,
 				'title' => get_the_title($post->ID),
 				'excerpt' => get_the_excerpt($post->ID),
-				'content' => wpautop($post->post_content),
+				'content' => do_shortcode(wptexturize(wpautop($post->post_content))),
 				'status' => $post->post_status,
 				'slug' => $post->post_name,
 				'posterUrl' => get_the_post_thumbnail_url($post->ID) ?: null,
