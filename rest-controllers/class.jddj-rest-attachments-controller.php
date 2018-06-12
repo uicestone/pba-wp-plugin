@@ -50,6 +50,12 @@ class JDDJ_REST_Attachment_Controller extends WP_REST_Controller {
 			$mime = get_post_mime_type($post->ID);
 			preg_match('/^(.*)\//', $mime, $matches);
 			$type = $matches[1];
+			$url = wp_get_attachment_url($post->ID);
+
+			if ($cdn_url = constant('CDN_URL')) {
+				$url = preg_replace('/' . preg_quote(site_url(), '/') . '\//', $cdn_url, $url);
+			}
+
 			$item = array(
 				'id' => $post->ID,
 				'title' => get_the_title($post->ID),
@@ -58,7 +64,7 @@ class JDDJ_REST_Attachment_Controller extends WP_REST_Controller {
 				'categories' => array_map(function ($category) {
 					return $category->name;
 				}, get_the_category($post->ID)),
-				'url' => wp_get_attachment_url($post->ID),
+				'url' => $url,
 				'createdAt' => $post->post_date,
 				'updatedAt' => $post->post_modified
 			);

@@ -61,14 +61,24 @@ class JDDJ_REST_Post_Controller extends WP_REST_Controller {
 				return $category->name;
 			}, get_the_category($post->ID));
 
+			$content = do_shortcode(wptexturize(wpautop($post->post_content)));
+			$posterUrl = get_the_post_thumbnail_url($post->ID) ?: null;
+
+			if ($cdn_url = constant('CDN_URL')) {
+				if ($posterUrl) {
+					$posterUrl = preg_replace('/' . preg_quote(site_url(), '/') . '\//', $cdn_url, $posterUrl);
+				}
+				$content = preg_replace('/src="' . preg_quote(site_url(), '/') . '\/(.*?)\.(jpg|png|gif|mp3|mp4)"/', 'src="' . $cdn_url . '$1.$2"', $content);
+			}
+
 			$item = array(
 				'id' => $post->ID,
 				'title' => get_the_title($post->ID),
 				'excerpt' => get_the_excerpt($post->ID),
-				'content' => do_shortcode(wptexturize(wpautop($post->post_content))),
+				'content' => $content,
 				'status' => $post->post_status,
 				'slug' => $post->post_name,
-				'posterUrl' => get_the_post_thumbnail_url($post->ID) ?: null,
+				'posterUrl' => $posterUrl,
 				'categories' => $categories,
 				'town' => $town,
 				'author' => (object) array(
