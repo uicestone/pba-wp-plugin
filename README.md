@@ -49,6 +49,20 @@ Response Body:
 }
 ```
 
+获取天气
+---
+GET `/jddj/v1/weather`
+
+Response Body: 
+```json
+{
+  "text":"",
+  "code":"0",
+  "temperature":"",
+  "icon":""
+}
+```
+
 获取党史上的这一天
 ---
 GET `/jddj/v1/cpc-review/:dateType/:mm-:dd`
