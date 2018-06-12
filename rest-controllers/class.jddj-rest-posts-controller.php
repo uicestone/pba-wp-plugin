@@ -55,7 +55,7 @@ class JDDJ_REST_Post_Controller extends WP_REST_Controller {
 			$town_category = get_category_by_slug('town');
 			$town = null;
 			$categories = array_map(function ($category) use (&$town, $town_category) {
-				if ($category->parent = $town_category->cat_ID) {
+				if ($category->parent === $town_category->cat_ID) {
 					$town = $category->name;
 				}
 				return $category->name;
