@@ -71,6 +71,10 @@ class JDDJ_REST_Post_Controller extends WP_REST_Controller {
 				$content = preg_replace('/src="' . preg_quote(site_url(), '/') . '\/(.*?)\.(jpg|png|gif|mp3|mp4)"/', 'src="' . $cdn_url . '$1.$2"', $content);
 			}
 
+			if ($cdn_url_qpic = constant('CDN_URL_QPIC')) {
+				$content = preg_replace('/https?:\/\/mmbiz.qpic.cn\//', $cdn_url_qpic, $content);
+			}
+
 			$item = array(
 				'id' => $post->ID,
 				'title' => get_the_title($post->ID),
