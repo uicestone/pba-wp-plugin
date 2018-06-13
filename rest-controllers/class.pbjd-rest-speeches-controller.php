@@ -1,6 +1,6 @@
 <?php
 
-class JDDJ_REST_Speech_Controller extends WP_REST_Controller {
+class PBJD_REST_Speech_Controller extends WP_REST_Controller {
 
 	public function __construct() {
 		$this->namespace = 'jddj/v1';

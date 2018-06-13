@@ -1,6 +1,6 @@
 <?php
 
-class JDDJ_Admin {
+class PBJD_Admin {
 
 	public static function init() {
 		self::register_post_types();

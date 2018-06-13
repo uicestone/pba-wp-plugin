@@ -1,23 +1,23 @@
 <?php
 
-WP_CLI::add_command( 'jddj', 'JDDJ_CLI' );
+WP_CLI::add_command( 'pbjd', 'PBJD_CLI' );
 
 /**
  * Filter spam comments.
  */
-class JDDJ_CLI extends WP_CLI_Command {
+class PBJD_CLI extends WP_CLI_Command {
 
 	/**
 	 * Download all cpc history reviews.
 	 *
 	 * ## EXAMPLES
 	 *
-	 *     wp jddj download_review
+	 *     wp pbjd download_review
 	 *
 	 */
 	public function download_review() {
 		$cpc_review_urls = null;
-		require JDDJ__PLUGIN_DIR . 'resource/cpc-review.php';
+		require PBJD__PLUGIN_DIR . 'resource/cpc-review.php';
 		foreach ($cpc_review_urls as $month => $urls) {
 			foreach ($urls as $day => $url) {
 				WP_CLI::line( 'Attempting: ' . $month . ' ' . $day );
@@ -46,7 +46,7 @@ class JDDJ_CLI extends WP_CLI_Command {
 	 *
 	 * ## EXAMPLES
 	 *
-	 *     wp jddj import_spots
+	 *     wp pbjd import_spots
 	 *
 	 */
 	public function import_spots() {
@@ -101,7 +101,7 @@ class JDDJ_CLI extends WP_CLI_Command {
 	 *
 	 * ## EXAMPLES
 	 *
-	 *     wp jddj find_spots_lat_long
+	 *     wp pbjd find_spots_lat_long
 	 *
 	 */
 	public function find_spots_lat_long() {
