@@ -66,7 +66,7 @@ class PBJD_REST_Misc_Controller extends WP_REST_Controller {
 
 		$count = (int) get_option('signed_in_member_count', 0);
 
-		return rest_ensure_response($count);
+		return rest_ensure_response(compact('count'));
 	}
 
 	/**

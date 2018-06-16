@@ -68,8 +68,11 @@ Response Body:
 GET `/jddj/v1/sign-in-member-count`
 
 Response Body: 
-
-0
+```json
+{
+  "count":0
+}
+```
 
 党员报到
 ---
