@@ -63,6 +63,47 @@ Response Body:
 }
 ```
 
+获取党员报到人数
+---
+GET `/jddj/v1/sign-in-member-count`
+
+Response Body: 
+
+0
+
+党员报到
+---
+POST `/jddj/v1/sign-in`
+
+Request Body:
+```json
+{
+  "name":"",
+  "idCard":"",
+  "mobile":"",
+  "unit":"",
+  "organization":"",
+  "sex":"男",
+  "residence":"",
+  "specialily":""
+}
+```
+
+Response Body: 
+```json
+{
+  "id":"",
+  "name":"",
+  "idCard":"",
+  "mobile":"",
+  "unit":"",
+  "organization":"",
+  "sex":"男",
+  "residence":"",
+  "specialily":""
+}
+```
+
 获取党史上的这一天
 ---
 GET `/jddj/v1/cpc-review/:dateType/:mm-:dd`
@@ -98,11 +139,11 @@ GET `jddj/v1/speeches/:speechType?page=:page&limit=:limit`
 Response Body: 
 ```json
 [{
-	"id":"",
-	"type":"movie|talk",
-	"bgid":"",
-	"audioUrl":"",
-	"authorName":""
+  "id":"",
+  "type":"movie|talk",
+  "bgid":"",
+  "audioUrl":"",
+  "authorName":""
 }]
 ```
 
@@ -120,10 +161,10 @@ Request Body: (form-data)
 Response Body: 
 ```json
 {
-	"id":"",
-	"bgid":"",
-	"audioUrl":"",
-	"qrcodeUrl":""
+  "id":"",
+  "bgid":"",
+  "audioUrl":"",
+  "qrcodeUrl":""
 }
 ```
 
@@ -134,11 +175,11 @@ GET `jddj/v1/speeches/:id`
 Response Body: 
 ```json
 {
-	"id":"",
-	"type":"movie|talk",
-	"bgid":"",
-	"audioUrl":"",
-	"authorName":""
+  "id":"",
+  "type":"movie|talk",
+  "bgid":"",
+  "audioUrl":"",
+  "authorName":""
 }
 ```
 
@@ -154,11 +195,11 @@ Request Body: (form-data)
 Response Body: 
 ```json
 {
-	"id":"",
-	"text":"",
-	"imageUrl":"",
-	"authorName":"",
-	"qrcodeUrl":""
+  "id":"",
+  "text":"",
+  "imageUrl":"",
+  "authorName":"",
+  "qrcodeUrl":""
 }
 ```
 
@@ -169,10 +210,10 @@ GET `jddj/v1/mottoes/:id`
 Response Body: 
 ```json
 {
-	"id":"",
-	"text":"",
-	"imageUrl":"",
-	"authorName":""
+  "id":"",
+  "text":"",
+  "imageUrl":"",
+  "authorName":""
 }
 ```
 
@@ -183,10 +224,10 @@ GET `jddj/v1/mottoes?page=:page&limit=:limit`
 Response Body: 
 ```json
 [{
-	"id":"",
-	"text":"",
-	"imageUrl":"",
-	"authorName":""
+  "id":"",
+  "text":"",
+  "imageUrl":"",
+  "authorName":""
 }]
 ```
 
@@ -197,18 +238,18 @@ GET `jddj/v1/spots`
 Response Body: 
 ```json
 {
-	"id":"",
-	"type":"服务中心|服务站|党性教育基地|组织生活现场开放点",
-	"name":"",
-	"town":"",
-	"address":"",
-	"latitude":31.000000,
-	"longitude":121.000000,
-	"contact":"",
-	"phone":"",
-	"wechatPublicName":"",
-	"desc":"<p>...</p>...",
-	"imageUrls": [""],
-	"liveVideoUrl":""
+  "id":"",
+  "type":"服务中心|服务站|党性教育基地|组织生活现场开放点",
+  "name":"",
+  "town":"",
+  "address":"",
+  "latitude":31.000000,
+  "longitude":121.000000,
+  "contact":"",
+  "phone":"",
+  "wechatPublicName":"",
+  "desc":"<p>...</p>...",
+  "imageUrls": [""],
+  "liveVideoUrl":""
 }
 ```
