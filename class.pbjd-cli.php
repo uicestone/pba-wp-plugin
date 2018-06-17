@@ -115,6 +115,13 @@ class PBJD_CLI extends WP_CLI_Command {
 				continue;
 			}
 
+			$latitude = get_post_meta($spot->ID, 'latitude', true);
+			$longitude = get_post_meta($spot->ID, 'longitude', true);
+
+			if ($latitude && $longitude) {
+				continue;
+			}
+
 			$result_string = file_get_contents('http://restapi.amap.com/v3/geocode/geo?key=' . constant('AMAP_KEY') . '&address=' . urlencode('嘉定区' . $address) . '&city=' . urlencode('上海'));
 			$result = json_decode($result_string);
 
