@@ -1,7 +1,4 @@
 <?php
-/**
- * @package Akismet
- */
 /*
 Plugin Name: Jiading CPC Center server
 Plugin URI: https://jddj.hbird.com.cn/

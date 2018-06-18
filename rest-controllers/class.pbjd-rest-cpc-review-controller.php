@@ -25,6 +25,13 @@ class PBJD_REST_CPC_Review_Controller extends WP_REST_Controller {
 				'callback' => array( $this, 'get_user_count' ),
 			)
 		) );
+
+		register_rest_route( $this->namespace, '/user-count', array(
+			array(
+				'methods' => WP_REST_Server::READABLE,
+				'callback' => array( $this, 'get_user_count_total' ),
+			)
+		) );
 	}
 
 	/**
@@ -78,6 +85,27 @@ class PBJD_REST_CPC_Review_Controller extends WP_REST_Controller {
 			'count' => (int)$user_count_this_day,
 			'percentage' => round($user_count_this_day / $user_count_total * 100, 1)
 		);
+		return rest_ensure_response($response);
+	}
+
+	/**
+	 * Get total user count of CPC Review
+	 *
+	 * @param WP_REST_Request $request
+	 * @return WP_Error|WP_REST_Response
+	 */
+	public function get_user_count_total( $request ) {
+
+		$user_count_total = 0;
+
+		foreach (array('birth', 'memo', 'enroll') as $date_type) {
+			$user_count_total += get_option('user_count_' . $date_type, 0);
+		}
+
+		$response = array(
+			'count' => $user_count_total
+		);
+
 		return rest_ensure_response($response);
 	}
 
