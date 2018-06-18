@@ -29,6 +29,9 @@ class PBJD_REST_Speech_Controller extends WP_REST_Controller {
 			array(
 				'methods' => WP_REST_Server::READABLE,
 				'callback' => array( $this, 'get_speech' ),
+			), array(
+				'methods' => WP_REST_Server::EDITABLE,
+				'callback' => array( $this, 'update_speech' ),
 			)
 		) );
 	}
@@ -122,6 +125,45 @@ class PBJD_REST_Speech_Controller extends WP_REST_Controller {
 			'audioUrl' => $file['url'],
 			'qrcodeUrl' => ''
 		));
+	}
+
+	/**
+	 * Update author info to a Speech to CPC
+	 *
+	 * @param WP_REST_Request $request
+	 * @return WP_Error|WP_REST_Response
+	 */
+	public static function update_speech( $request ) {
+
+		$id = $request->get_param('id');
+
+		$post = get_post($id);
+
+		if (!$post || $post->post_type !== 'speech') {
+			return rest_ensure_response(new WP_Error(404, 'Not found.', $id));
+		}
+
+		$body = $request->get_body();
+		$data = json_decode($body);
+
+		if (isset($data->authorName)) {
+			update_post_meta($id, 'author_name', $data->authorName);
+		}
+
+		if (isset($data->authorTown)) {
+			update_post_meta($id, 'author_town', $data->authorTown);
+		}
+
+		$speech = array(
+			'id' => $post->ID,
+			'type' => get_post_meta($post->ID, 'type', true),
+			'bgid' => get_post_meta($post->ID, 'bgid', true),
+			'audioUrl' => get_post_meta($post->ID, 'audio_url', true),
+			'authorName' => get_post_meta($post->ID, 'author_name', true),
+			'authorTown' => get_post_meta($post->ID, 'author_town', true),
+		);
+
+		return rest_ensure_response((object) $speech);
 	}
 
 	/**
