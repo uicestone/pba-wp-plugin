@@ -59,6 +59,8 @@ class PBJD_Admin {
 	protected static function manage_admin_columns () {
 
 		add_filter('manage_speech_posts_columns', function($columns) {
+			$columns['author_town'] = '所属街镇';
+			$columns['author_name'] = '姓名';
 			$columns['bgid'] = '背景音乐';
 			$columns['audio'] = '录音';
 			return $columns;
@@ -67,6 +69,14 @@ class PBJD_Admin {
 		add_action('manage_speech_posts_custom_column', function($column_name) {
 			global $post;
 			switch ($column_name ) {
+				case 'author_town' :
+					$author_town = get_post_meta($post->ID, 'author_town', true);
+					echo $author_town;
+					break;
+				case 'author_name' :
+					$author_name = get_post_meta($post->ID, 'author_name', true);
+					echo $author_name;
+					break;
 				case 'bgid' :
 					$bgid = get_post_meta($post->ID, 'bgid', true);
 					echo $bgid;
