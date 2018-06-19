@@ -32,6 +32,8 @@ class PBJD_REST_Attachment_Controller extends WP_REST_Controller {
 			'category' => 'category_name',
 			'page' => 'paged',
 			'limit' => 'posts_per_page',
+			'order' => 'order',
+			'orderby' => 'orderby'
 		);
 
 		$parameters = array();
