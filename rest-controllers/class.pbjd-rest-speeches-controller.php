@@ -70,7 +70,8 @@ class PBJD_REST_Speech_Controller extends WP_REST_Controller {
 				'type' => $type,
 				'bgid' => get_post_meta($post->ID, 'bgid', true),
 				'audioUrl' => get_post_meta($post->ID, 'audio_url', true),
-				'authorName' => ''
+				'authorName' => get_post_meta($post->ID, 'author_name', true),
+				'authorTown' => get_post_meta($post->ID, 'author_town', true),
 			);
 			return (object) $speech;
 		}, $posts);
@@ -187,7 +188,8 @@ class PBJD_REST_Speech_Controller extends WP_REST_Controller {
 			'type' => get_post_meta($post->ID, 'type', true),
 			'bgid' => get_post_meta($post->ID, 'bgid', true),
 			'audioUrl' => get_post_meta($post->ID, 'audio_url', true),
-			'authorName' => ''
+			'authorName' => get_post_meta($post->ID, 'author_name', true),
+			'authorTown' => get_post_meta($post->ID, 'audio_town', true),
 		);
 
 		return rest_ensure_response((object) $speech);
