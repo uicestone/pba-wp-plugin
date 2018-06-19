@@ -3,10 +3,14 @@ Server APIs
 
 获取文章列表
 ---
-GET `/jddj/v1/posts/?category=:slug&month=:yearMonth`
+GET `/jddj/v1/posts/?category=:slug&limit=:limit&page=:page&order=:order&orderby=:orderby&month=:yearMonth`
 
-`:slug`: 可选，category名称
-`:yearMonth`: 可选，请求月度菜单数据时筛选月份
+`:slug`: category名称
+`:limit`: 获得条数，默认为5，-1为不限制
+`:page` : 页码
+`:order`: asc|desc 排序方式，默认为desc
+`:orderby`: 排序依据，默认为发布日期
+`:yearMonth`: 请求月度菜单数据时筛选月份
 
 Response Body: 
 ```json
@@ -33,7 +37,13 @@ Response Body:
 
 获取附件列表
 ---
-GET `/jddj/v1/attachments/?category=:slug`
+GET `/jddj/v1/attachments/?category=:slug&limit=:limit&page=:page&order=:order&orderby=:orderby`
+
+`:slug`: 可选，category名称
+`:limit`: 可选，获得条数，默认为5，-1为不限制
+`:page` : 页码
+`:order`: 可选asc或desc，排序方式，默认为desc
+`:orderby`: 可选，排序依据，默认为发布日期
 
 Response Body: 
 ```json
@@ -135,9 +145,23 @@ Response Body:
 }
 ```
 
+获取党史上的一天参与人数
+---
+GET `jddj/v1/user-count`
+
+Response Body: 
+```json
+{
+  "count":0
+}
+```
+
 获取党建声音列表
 ---
 GET `jddj/v1/speeches/:speechType?page=:page&limit=:limit`
+
+`:limit`: 获得条数，默认为5，-1为不限制
+`:page`: 页码
 
 Response Body: 
 ```json
@@ -146,7 +170,8 @@ Response Body:
   "type":"movie|talk",
   "bgid":"",
   "audioUrl":"",
-  "authorName":""
+  "authorName":"",
+  "authorTown":""
 }]
 ```
 
@@ -166,10 +191,35 @@ Response Body:
 {
   "id":"",
   "bgid":"",
-  "audioUrl":"",
-  "qrcodeUrl":""
+  "audioUrl":""
 }
 ```
+
+更新党建声音作者信息
+---
+POST|PUT|PATCH `jddj/v1/speeches/:speechId`
+
+- `:speechId`: 党建声音ID
+
+Request Body: 
+```json
+{
+  "authorName":"",
+  "authorTown":""
+}
+
+Response Body: 
+```json
+{
+  "id":"",
+  "type":"movie|talk",
+  "bgid":"",
+  "audioUrl":"",
+  "authorName":"",
+  "authorTown":""
+}
+```
+
 
 获得党建声音
 ---
@@ -182,7 +232,8 @@ Response Body:
   "type":"movie|talk",
   "bgid":"",
   "audioUrl":"",
-  "authorName":""
+  "authorName":"",
+  "authorTown":""
 }
 ```
 
@@ -201,8 +252,7 @@ Response Body:
   "id":"",
   "text":"",
   "imageUrl":"",
-  "authorName":"",
-  "qrcodeUrl":""
+  "authorName":""
 }
 ```
 
