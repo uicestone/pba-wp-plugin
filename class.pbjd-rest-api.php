@@ -16,7 +16,7 @@ class PBJD_REST_API {
 		(new PBJD_REST_CPC_Review_Controller())->register_routes();
 		(new PBJD_REST_Misc_Controller())->register_routes();
 		(new PBJD_REST_Motto_Controller())->register_routes();
-		(new PBJD_REST_Post_Conatroller())->register_routes();
+		(new PBJD_REST_Post_Controller())->register_routes();
 		(new PBJD_REST_Room_Controller())->register_routes();
 		(new PBJD_REST_Speech_Controller())->register_routes();
 		(new PBJD_REST_Spot_Controller())->register_routes();
