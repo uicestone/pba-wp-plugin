@@ -70,6 +70,19 @@ class PBJD_Admin {
 			'menu_icon' => 'dashicons-admin-home',
 			'has_archive' => true
 		));
+
+		register_post_type('appointment', array(
+			'label' => '预约报名',
+			'labels' => array(
+				'all_items' => '所有预约报名',
+				'add_new' => '添加预约报名',
+				'add_new_item' => '新预约报名',
+				'not_found' => '未找到预约报名'
+			),
+			'public' => true,
+			'supports' => array('custom-fields'),
+			'menu_icon' => 'dashicons-clock'
+		));
 	}
 
 	protected static function manage_admin_columns () {
@@ -194,6 +207,23 @@ class PBJD_Admin {
 				case 'open' :
 					$open = get_post_meta($post->ID, 'open', true);
 					echo $open ? '是' : '否';
+					break;
+				default;
+			}
+		});
+
+		add_filter('manage_appointment_posts_columns', function($columns) {
+			$columns['type'] = '类型';
+			unset($columns['date']);
+			return $columns;
+		});
+
+		add_action('manage_appointment_posts_custom_column', function($column_name) {
+			global $post;
+			switch ($column_name ) {
+				case 'type' :
+					$type = get_post_meta($post->ID, 'type', true);
+					echo $type;
 					break;
 				default;
 			}

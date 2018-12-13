@@ -28,14 +28,14 @@ class PBJD_REST_Room_Controller extends WP_REST_Controller {
 	 */
 	public static function get_rooms( $request ) {
 
-		$query = array('post_type' => 'room', 'posts_per_page' => -1, 'orderby' => 'ID', 'order' => 'asc');
+		$parameters = array('post_type' => 'room', 'posts_per_page' => -1, 'orderby' => 'ID', 'order' => 'asc');
 
 		if ($request->get_param('floor')) {
-			$query['meta_key'] = 'floor';
-			$query['meta_value'] = $request->get_param('floor');
+			$parameters['meta_key'] = 'floor';
+			$parameters['meta_value'] = $request->get_param('floor');
 		}
 
-		$posts = get_posts($query);
+		$posts = get_posts($parameters);
 
 		$rooms = array_map(function (WP_Post $post) {
 
@@ -48,7 +48,7 @@ class PBJD_REST_Room_Controller extends WP_REST_Controller {
 				'color' => get_post_meta($post->ID, 'color', true),
 				'hint' => get_post_meta($post->ID, 'hint', true),
 				'content' => wpautop($post->post_content),
-				'thumbnail' => get_the_post_thumbnail_url($post->ID, 'full')
+				'thumbnail' => get_the_post_thumbnail_url($post->ID, 'full') ?: null
 			);
 
 			return (object) $room;
