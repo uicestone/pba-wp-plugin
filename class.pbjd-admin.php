@@ -13,6 +13,8 @@ class PBJD_Admin {
 		register_taxonomy_for_object_type('category', 'attachment');
 		register_taxonomy_for_object_type('post_tag', 'attachment');
 
+		add_post_type_support('attachment', '');
+
 		register_post_type('speech', array(
 			'label' => '党建声音',
 			'labels' => array(
@@ -52,6 +54,20 @@ class PBJD_Admin {
 			'public' => true,
 			'supports' => array('title', 'editor'),
 			'menu_icon' => 'dashicons-location-alt',
+			'has_archive' => true
+		));
+
+		register_post_type('room', array(
+			'label' => '房间',
+			'labels' => array(
+				'all_items' => '所有房间',
+				'add_new' => '添加房间',
+				'add_new_item' => '新房间',
+				'not_found' => '未找到房间'
+			),
+			'public' => true,
+			'supports' => array('title', 'editor', 'thumbnail'),
+			'menu_icon' => 'dashicons-admin-home',
 			'has_archive' => true
 		));
 	}
@@ -146,6 +162,38 @@ class PBJD_Admin {
 				case 'address' :
 					$address = get_post_meta($post->ID, 'address', true);
 					echo $address;
+					break;
+				default;
+			}
+		});
+
+		add_filter('manage_room_posts_columns', function($columns) {
+			$columns['floor'] = '楼层';
+			$columns['number'] = '房间号';
+			$columns['color'] = '颜色';
+			$columns['open'] = '开放预约';
+			unset($columns['date']);
+			return $columns;
+		});
+
+		add_action('manage_room_posts_custom_column', function($column_name) {
+			global $post;
+			switch ($column_name ) {
+				case 'floor' :
+					$floor = get_post_meta($post->ID, 'floor', true);
+					echo $floor;
+					break;
+				case 'number' :
+					$number = get_post_meta($post->ID, 'number', true);
+					echo $number;
+					break;
+				case 'color' :
+					$color = get_post_meta($post->ID, 'color', true);
+					echo '<div style="width:2em;height:1em;background:' . $color . '"></div>';
+					break;
+				case 'open' :
+					$open = get_post_meta($post->ID, 'open', true);
+					echo $open ? '是' : '否';
 					break;
 				default;
 			}
