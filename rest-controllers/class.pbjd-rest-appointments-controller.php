@@ -57,12 +57,15 @@ class PBJD_REST_Appointment_Controller extends WP_REST_Controller {
 	public static function post_appointment( $request ) {
 
 		$body = $request->get_body_params();
-		return rest_ensure_response($body);
 
 		$appointment_id = wp_insert_post(array(
 			'post_type' => 'appointment',
 			'post_status' => 'publish'
 		));
+
+		if (isset($body['预约日期'])) {
+			$body['预约日期'] = date('Y-m-d', strtotime($body['预约日期']));
+		}
 
 		foreach ($body as $key => $value) {
 			add_post_meta($appointment_id, $key, $value);
