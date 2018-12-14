@@ -5,7 +5,7 @@ class PBJD_Admin {
 	public static function init() {
 		self::register_post_types();
 		self::manage_admin_columns();
-
+		self::add_admin_buttons();
 	}
 
 	protected static function register_post_types () {
@@ -58,12 +58,12 @@ class PBJD_Admin {
 		));
 
 		register_post_type('room', array(
-			'label' => '房间',
+			'label' => '场馆',
 			'labels' => array(
-				'all_items' => '所有房间',
-				'add_new' => '添加房间',
-				'add_new_item' => '新房间',
-				'not_found' => '未找到房间'
+				'all_items' => '所有场馆',
+				'add_new' => '添加场馆',
+				'add_new_item' => '新场馆',
+				'not_found' => '未找到场馆'
 			),
 			'public' => true,
 			'supports' => array('title', 'editor', 'thumbnail'),
@@ -214,20 +214,86 @@ class PBJD_Admin {
 
 		add_filter('manage_appointment_posts_columns', function($columns) {
 			$columns['type'] = '类型';
+			$columns['target'] = '场馆/活动';
+			$columns['datetime'] = '日期时间';
+			$columns['contact'] = '联系人';
+			$columns['phone'] = '联系电话';
+			$columns['review'] = '审核';
+			unset($columns['title']);
 			unset($columns['date']);
 			return $columns;
 		});
 
 		add_action('manage_appointment_posts_custom_column', function($column_name) {
 			global $post;
+			$type = get_post_meta($post->ID, 'type', true);
 			switch ($column_name ) {
 				case 'type' :
-					$type = get_post_meta($post->ID, 'type', true);
 					echo $type;
 					break;
+				case 'target' :
+					if ($type === '活动报名') {
+						$event_id = get_post_meta($post->ID, 'event_id', true);
+						echo get_the_title($event_id);
+					}
+					elseif($type === '参观预约') {
+						echo '参观党建服务中心';
+					}
+					elseif($type === '场馆预约') {
+						echo get_post_meta($post->ID, '会议室/培训室', true);
+					}
+					break;
+				case 'datetime' :
+					$date = get_post_meta($post->ID, '预约日期', true);
+					$time = get_post_meta($post->ID, '预约时间', true);
+					echo $date . ' ' . $time;
+					break;
+				case 'contact' :
+					$value = get_post_meta($post->ID, '联系人', true);
+					echo $value;
+					break;
+				case 'phone' :
+					$value = get_post_meta($post->ID, '联系电话', true);
+					echo $value;
+					break;
+				case 'review' :
+					echo '<input type="hidden" name="confirmed" value="' . get_post_meta($post->ID, 'confirmed', true) . '">';
 				default;
 			}
 		});
+	}
+
+	protected static function add_admin_buttons () {
+		add_action('admin_footer', function () {
+			$screen = get_current_screen();
+			if ( $screen->post_type != 'appointment' )   // Only add to users.php page
+				return;
+			?>
+			<script type="text/javascript">
+				jQuery(document).ready( function($) {
+					$('.review.column-review').each(function () {
+						var postId = $(this).parent().attr('id').replace('post-', '');
+						if ($(this).find('[name="confirmed"]').val() === '1') {
+                            $(this).append('<span>已确认</span>');
+                        } else if ($(this).find('[name="confirmed"]').val() === '0') {
+                            $(this).append('<span>已拒绝</span>');
+						} else {
+							$(this).append('<form method="POST"><input type="hidden" name="pbjd_confirm_appointment" value="' + postId + '"><input class="button" name="pbjd_confirm_appointment_yes" type="submit" value="确认"> <input class="button" type="submit" name="pbjd_confirm_appointment_no" value="拒绝"></form>');
+						}
+					});
+				});
+			</script>
+			<?php
+		});
+
+		if (isset($_POST['pbjd_confirm_appointment'])) {
+			$post_id = $_POST['pbjd_confirm_appointment'];
+			if (isset($_POST['pbjd_confirm_appointment_yes'])) {
+				update_post_meta($post_id, 'confirmed', 1);
+			} elseif (isset($_POST['pbjd_confirm_appointment_no'])) {
+				update_post_meta($post_id, 'confirmed', 0);
+			}
+		}
 	}
 
 }
