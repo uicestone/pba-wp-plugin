@@ -54,7 +54,7 @@ class PBJD_REST_Post_Controller extends WP_REST_Controller {
 
 		if (!$request->get_param('page')) {
 			$parameters_all = $parameters;
-			unset($parameters_all['posts_per_page']);
+			$parameters_all['posts_per_page'] = -1;
 			unset($parameters_all['paged']);
 			$posts_all = get_posts($parameters_all);
 			$posts_all_count = count($posts_all);
