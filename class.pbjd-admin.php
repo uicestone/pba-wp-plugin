@@ -71,6 +71,20 @@ class PBJD_Admin {
 			'has_archive' => true
 		));
 
+		register_post_type('event', array(
+			'label' => '活动',
+			'labels' => array(
+				'all_items' => '所有活动',
+				'add_new' => '添加活动',
+				'add_new_item' => '新活动',
+				'not_found' => '未找到活动'
+			),
+			'public' => true,
+			'supports' => array('title', 'editor', 'thumbnail'),
+			'menu_icon' => 'dashicons-calendar-alt',
+			'has_archive' => true
+		));
+
 		register_post_type('appointment', array(
 			'label' => '预约报名',
 			'labels' => array(

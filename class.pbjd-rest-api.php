@@ -3,6 +3,7 @@
 require_once( PBJD__PLUGIN_DIR . 'rest-controllers/class.pbjd-rest-appointments-controller.php' );
 require_once( PBJD__PLUGIN_DIR . 'rest-controllers/class.pbjd-rest-attachments-controller.php' );
 require_once( PBJD__PLUGIN_DIR . 'rest-controllers/class.pbjd-rest-cpc-review-controller.php' );
+require_once( PBJD__PLUGIN_DIR . 'rest-controllers/class.pbjd-rest-events-controller.php' );
 require_once( PBJD__PLUGIN_DIR . 'rest-controllers/class.pbjd-rest-misc-controller.php' );
 require_once( PBJD__PLUGIN_DIR . 'rest-controllers/class.pbjd-rest-mottoes-controller.php' );
 require_once( PBJD__PLUGIN_DIR . 'rest-controllers/class.pbjd-rest-posts-controller.php' );
@@ -16,6 +17,7 @@ class PBJD_REST_API {
 		(new PBJD_REST_Appointment_Controller())->register_routes();
 		(new PBJD_REST_Attachment_Controller())->register_routes();
 		(new PBJD_REST_CPC_Review_Controller())->register_routes();
+		(new PBJD_REST_Event_Controller())->register_routes();
 		(new PBJD_REST_Misc_Controller())->register_routes();
 		(new PBJD_REST_Motto_Controller())->register_routes();
 		(new PBJD_REST_Post_Controller())->register_routes();
