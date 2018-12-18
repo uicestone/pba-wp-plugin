@@ -91,7 +91,9 @@ class PBJD_REST_Room_Controller extends WP_REST_Controller {
 			'color' => get_post_meta($post->ID, 'color', true),
 			'hint' => get_post_meta($post->ID, 'hint', true),
 			'content' => wpautop($post->post_content),
-			'thumbnail' => get_the_post_thumbnail_url($post->ID, 'full') ?: null
+			'thumbnail' => get_the_post_thumbnail_url($post->ID, 'full') ?: null,
+			'appointments' => json_decode(get_post_meta($post->ID, 'appointments', true)),
+			'fullDates' => json_decode(get_post_meta($post->ID, 'full_dates', true)),
 		);
 
 		return rest_ensure_response((object) $room);

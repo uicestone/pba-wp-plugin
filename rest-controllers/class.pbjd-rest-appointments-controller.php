@@ -58,14 +58,63 @@ class PBJD_REST_Appointment_Controller extends WP_REST_Controller {
 
 		$body = $request->get_body_params();
 
+		if (isset($body['预约日期'])) {
+			$body['预约日期'] = date('Y-m-d', strtotime($body['预约日期']));
+		}
+
+		if (!$body['type'] || !in_array($body['type'], array('参观预约', '场馆预约', '活动报名'))) {
+			return rest_ensure_response(new WP_Error(400, 'Appointment type error.'));
+		}
+
+		if ($body['type'] === '参观预约') {
+			$room_number = 0;
+		} elseif ($body['type'] === '场馆预约') {
+			if (!$body['room_numer']) {
+				return rest_ensure_response(new WP_Error(400, 'Missing appointment room number.'));
+			}
+			$room_number = $body['room_numer'];
+		}
+
+		if (isset($room_number)) {
+
+			$room = get_posts(array('post_type' => 'room', 'meta_key' => 'number', 'meta_value' => $room_number))[0];
+			if (!$room) {
+				return rest_ensure_response(new WP_Error(400, 'Appointment room not found.'));
+			}
+
+			$date = $body['预约日期'];
+			$time = $body['预约时间'];
+
+			if (!$date || !$time) {
+				return rest_ensure_response(new WP_Error(400, 'Missing appointment date or time.'));
+			}
+
+			$room_appointments = json_decode(get_post_meta($room->ID, 'appointments', true), JSON_OBJECT_AS_ARRAY);
+			$full_dates = json_decode(get_post_meta($room->ID, 'full_dates', true));
+
+			if (!$full_dates) {
+				$full_dates = array();
+			} elseif (in_array($date, $full_dates)) {
+				return rest_ensure_response(new WP_Error(400, 'Room occupied full day.'));
+			}
+
+			if ((int)$room_number === 101 && $time === '全天'
+				|| (int)$room_number === 101 && count($room_appointments[$date]) === 2 // 红厅时间段为上午/下午/全天
+				|| (int)$room_number !== 101 && count($room_appointments[$date]) === 4) { // 其他为5段
+
+				$full_dates[] = $date;
+				update_post_meta($room->ID, 'full_dates', json_encode($full_dates));
+			}
+
+			$room_appointments[$date][] = $time;
+
+			update_post_meta($room->ID, 'appointments', json_encode($room_appointments));
+		}
+
 		$appointment_id = wp_insert_post(array(
 			'post_type' => 'appointment',
 			'post_status' => 'publish'
 		));
-
-		if (isset($body['预约日期'])) {
-			$body['预约日期'] = date('Y-m-d', strtotime($body['预约日期']));
-		}
 
 		foreach ($body as $key => $value) {
 			add_post_meta($appointment_id, $key, $value);
