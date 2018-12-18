@@ -18,10 +18,18 @@ class PBJD_REST_Room_Controller extends WP_REST_Controller {
 				'callback' => array( $this, 'get_rooms' ),
 			)
 		) );
+
+		register_rest_route( $this->namespace, '/' . $this->rest_base . '/(?P<number>.+)', array(
+			array(
+				'methods' => WP_REST_Server::READABLE,
+				'callback' => array( $this, 'get_room' ),
+			)
+		) );
+
 	}
 
 	/**
-	 * Get all spots
+	 * Get all rooms
 	 *
 	 * @param WP_REST_Request $request
 	 * @return WP_Error|WP_REST_Response
@@ -56,6 +64,37 @@ class PBJD_REST_Room_Controller extends WP_REST_Controller {
 		}, $posts);
 
 		return rest_ensure_response($rooms);
+	}
+
+	/**
+	 * Get single Room
+	 *
+	 * @param WP_REST_Request $request
+	 * @return WP_Error|WP_REST_Response
+	 */
+	public static function get_room( $request ) {
+
+		$number = $request->get_param('number');
+
+		$post = get_posts(array('post_type' => 'room', 'meta_key' => 'number', 'meta_value' => $number))[0];
+
+		if (!$post) {
+			return rest_ensure_response(new WP_Error(404, 'Not found.', $number));
+		}
+
+		$room = array(
+			'id' => $post->ID,
+			'floor' => (int) get_post_meta($post->ID, 'floor', true),
+			'number' => get_post_meta($post->ID, 'number', true),
+			'title' => get_the_title($post->ID),
+			'open' => (boolean) get_post_meta($post->ID, 'open', true),
+			'color' => get_post_meta($post->ID, 'color', true),
+			'hint' => get_post_meta($post->ID, 'hint', true),
+			'content' => wpautop($post->post_content),
+			'thumbnail' => get_the_post_thumbnail_url($post->ID, 'full') ?: null
+		);
+
+		return rest_ensure_response((object) $room);
 	}
 
 }
