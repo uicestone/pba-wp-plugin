@@ -58,10 +58,24 @@ class PBJD_REST_Event_Controller extends WP_REST_Controller {
 
 			$content = do_shortcode(wptexturize(wpautop($post->post_content)));
 
+			$posterUrl = get_the_post_thumbnail_url($post->ID) ?: null;
+
+			if ($cdn_url = constant('CDN_URL')) {
+				if ($posterUrl) {
+					$posterUrl = preg_replace('/' . preg_quote(site_url(), '/') . '\//', $cdn_url, $posterUrl);
+				}
+				$content = preg_replace('/src="' . preg_quote(site_url(), '/') . '\/(.*?)\.(jpg|png|gif|mp3|mp4)"/', 'src="' . $cdn_url . '$1.$2"', $content);
+			}
+
+			if ($cdn_url_qpic = constant('CDN_URL_QPIC')) {
+				$content = preg_replace('/https?:\/\/mmbiz.qpic.cn\//', $cdn_url_qpic, $content);
+			}
+
 			$item = array(
 				'id' => $post->ID,
 				'title' => get_the_title($post->ID),
 				'content' => $content,
+				'posterUrl' => $posterUrl,
 				'open' => (bool) get_post_meta($post->ID, 'open', true),
 				'createdAt' => $post->post_date,
 				'updatedAt' => $post->post_modified
