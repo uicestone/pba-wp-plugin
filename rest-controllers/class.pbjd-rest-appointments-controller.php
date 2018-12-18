@@ -59,7 +59,7 @@ class PBJD_REST_Appointment_Controller extends WP_REST_Controller {
 		$body = $request->get_body_params();
 
 		if (isset($body['预约日期'])) {
-			$body['预约日期'] = date('Y-m-d', strtotime($body['预约日期']));
+			$body['预约日期'] = date('Y-m-d', strtotime($body['预约日期']) + get_option('gmt_offset') * HOUR_IN_SECONDS);
 		}
 
 		if (!$body['type'] || !in_array($body['type'], array('参观预约', '场馆预约', '活动报名'))) {
@@ -98,9 +98,11 @@ class PBJD_REST_Appointment_Controller extends WP_REST_Controller {
 				return rest_ensure_response(new WP_Error(400, 'Room occupied full day.'));
 			}
 
-			if ((int)$room_number === 101 && $time === '全天'
-				|| (int)$room_number === 101 && count($room_appointments[$date]) === 2 // 红厅时间段为上午/下午/全天
-				|| (int)$room_number !== 101 && count($room_appointments[$date]) === 4) { // 其他为5段
+			$time_type = (int)$room_number === 101 || (int)$room_number === 0 ? '5-slot' : '2-slot';
+
+			if ($time_type === '2-slot' && $time === '全天'
+				|| $time_type === '2-slot' && count($room_appointments[$date]) === 1 // 非红厅场馆时间段为上午/下午
+				|| $time_type === '5-slot' && count($room_appointments[$date]) === 4) { // 其他为5段
 
 				$full_dates[] = $date;
 				update_post_meta($room->ID, 'full_dates', json_encode($full_dates));
@@ -108,7 +110,7 @@ class PBJD_REST_Appointment_Controller extends WP_REST_Controller {
 
 			$room_appointments[$date][] = $time;
 
-			update_post_meta($room->ID, 'appointments', json_encode($room_appointments));
+			update_post_meta($room->ID, 'appointments', json_encode($room_appointments, JSON_UNESCAPED_UNICODE));
 		}
 
 		$appointment_id = wp_insert_post(array(
