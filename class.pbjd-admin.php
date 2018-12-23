@@ -350,11 +350,36 @@ class PBJD_Admin {
 		});
 
 		if (isset($_POST['pbjd_confirm_appointment'])) {
-			$post_id = $_POST['pbjd_confirm_appointment'];
+			$appointment_id = $_POST['pbjd_confirm_appointment'];
 			if (isset($_POST['pbjd_confirm_appointment_yes'])) {
-				update_post_meta($post_id, 'confirmed', 1);
+				update_post_meta($appointment_id, 'confirmed', 1);
 			} elseif (isset($_POST['pbjd_confirm_appointment_no'])) {
-				update_post_meta($post_id, 'confirmed', 0);
+				update_post_meta($appointment_id, 'confirmed', 0);
+				$room_number = get_post_meta($appointment_id, 'room_number', true);
+				$room = get_posts(array('post_type' => 'room', 'meta_key' => 'number', 'meta_value' => $room_number))[0];
+				if (!$room) {
+					exit('Room not found, number: ' . $room_number);
+				}
+				$room_id = $room->ID;
+				// remove date and time from appointments
+				$appointments = json_decode(get_post_meta($room_id, 'appointments', true), JSON_OBJECT_AS_ARRAY);
+				$appointments_origin = $appointments;
+				$date = get_post_meta($appointment_id, '预约日期', true);
+				$time = get_post_meta($appointment_id, '预约时间', true);
+
+				$appointments[$date] = array_filter($appointments[$date], function($t) use($time) { return $t !== $time; });
+				if (count($appointments[$date]) !== count($appointments_origin[$date])) {
+					// if any time is released, occupied date will be released too
+					$full_dates = json_decode(get_post_meta($room_id, 'full_dates', true));
+					$full_dates = array_filter($full_dates, function($d) use($date) { return $d !== $date; });
+					update_post_meta($room_id, 'full_dates', json_encode($full_dates));
+				}
+
+				if (!$appointments[$date]) {
+					unset($appointments[$date]);
+				}
+
+				update_post_meta($room_id, 'appointments', json_encode($appointments, JSON_UNESCAPED_UNICODE));
 			}
 		}
 	}
