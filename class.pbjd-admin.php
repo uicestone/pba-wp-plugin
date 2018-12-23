@@ -99,9 +99,10 @@ class PBJD_Admin {
 		));
 	}
 
-	protected static function manage_admin_columns () {
+	protected static function manage_admin_columns ()
+	{
 
-		add_filter('manage_speech_posts_columns', function($columns) {
+		add_filter('manage_speech_posts_columns', function ($columns) {
 			$columns['author_town'] = '所属街镇';
 			$columns['author_name'] = '姓名';
 			$columns['bgid'] = '背景音乐';
@@ -109,9 +110,9 @@ class PBJD_Admin {
 			return $columns;
 		});
 
-		add_action('manage_speech_posts_custom_column', function($column_name) {
+		add_action('manage_speech_posts_custom_column', function ($column_name) {
 			global $post;
-			switch ($column_name ) {
+			switch ($column_name) {
 				case 'author_town' :
 					$author_town = get_post_meta($post->ID, 'author_town', true);
 					echo $author_town;
@@ -132,16 +133,16 @@ class PBJD_Admin {
 			}
 		});
 
-		add_filter('manage_motto_posts_columns', function($columns) {
+		add_filter('manage_motto_posts_columns', function ($columns) {
 			$columns['text'] = '文字';
 			$columns['author_name'] = '作者';
 			$columns['image'] = '图片';
 			return $columns;
 		});
 
-		add_action('manage_motto_posts_custom_column', function($column_name) {
+		add_action('manage_motto_posts_custom_column', function ($column_name) {
 			global $post;
-			switch ($column_name ) {
+			switch ($column_name) {
 				case 'text' :
 					echo $post->post_content;
 					break;
@@ -157,7 +158,7 @@ class PBJD_Admin {
 			}
 		});
 
-		add_filter('manage_spot_posts_columns', function($columns) {
+		add_filter('manage_spot_posts_columns', function ($columns) {
 			$columns['type'] = '类型';
 			$columns['town'] = '所属街镇';
 			$columns['contact'] = '联系人';
@@ -167,9 +168,9 @@ class PBJD_Admin {
 			return $columns;
 		});
 
-		add_action('manage_spot_posts_custom_column', function($column_name) {
+		add_action('manage_spot_posts_custom_column', function ($column_name) {
 			global $post;
-			switch ($column_name ) {
+			switch ($column_name) {
 				case 'type' :
 					$type = get_post_meta($post->ID, 'type', true);
 					echo $type;
@@ -194,7 +195,7 @@ class PBJD_Admin {
 			}
 		});
 
-		add_filter('manage_room_posts_columns', function($columns) {
+		add_filter('manage_room_posts_columns', function ($columns) {
 			$columns['floor'] = '楼层';
 			$columns['number'] = '房间号';
 			$columns['color'] = '颜色';
@@ -203,9 +204,9 @@ class PBJD_Admin {
 			return $columns;
 		});
 
-		add_action('manage_room_posts_custom_column', function($column_name) {
+		add_action('manage_room_posts_custom_column', function ($column_name) {
 			global $post;
-			switch ($column_name ) {
+			switch ($column_name) {
 				case 'floor' :
 					$floor = get_post_meta($post->ID, 'floor', true);
 					echo $floor;
@@ -226,22 +227,23 @@ class PBJD_Admin {
 			}
 		});
 
-		add_filter('manage_appointment_posts_columns', function($columns) {
+		add_filter('manage_appointment_posts_columns', function ($columns) {
 			$columns['type'] = '类型';
 			$columns['target'] = '场馆/活动';
 			$columns['datetime'] = '日期时间';
 			$columns['contact'] = '联系人';
 			$columns['phone'] = '联系电话';
+			$columns['info'] = '其他信息';
 			$columns['review'] = '审核';
 			unset($columns['title']);
 			unset($columns['date']);
 			return $columns;
 		});
 
-		add_action('manage_appointment_posts_custom_column', function($column_name) {
+		add_action('manage_appointment_posts_custom_column', function ($column_name) {
 			global $post;
 			$type = get_post_meta($post->ID, 'type', true);
-			switch ($column_name ) {
+			switch ($column_name) {
 				case 'type' :
 					echo $type;
 					break;
@@ -249,11 +251,9 @@ class PBJD_Admin {
 					if ($type === '活动报名') {
 						$event_id = get_post_meta($post->ID, 'event_id', true);
 						echo get_the_title($event_id);
-					}
-					elseif($type === '参观预约') {
+					} elseif ($type === '参观预约') {
 						echo '参观党建服务中心';
-					}
-					elseif($type === '场馆预约') {
+					} elseif ($type === '场馆预约') {
 						echo get_post_meta($post->ID, '会议室/培训室', true);
 					}
 					break;
@@ -270,16 +270,57 @@ class PBJD_Admin {
 					$value = get_post_meta($post->ID, '联系电话', true);
 					echo $value;
 					break;
+				case 'info' :
+					if ($type === '参观预约') {
+						$fields = ['单位名称', '参加人数'];
+					} elseif ($type === '场馆预约') {
+						$room_number = get_post_meta($post->ID, 'room_number', true);
+						if ($room_number === '101') {
+							$fields = ['单位名称', '参加人数'];
+						} else {
+							$fields = ['单位名称', '活动名称', '参加人数', '备注'];
+							$fapiao_fields = ['公司名称', '税号', '账号', '开户银行', '单位地址'];
+						}
+					}
+
+					if (isset($fields)) {
+						echo '<ul>' . implode("\n", array_map(function ($field) use ($post) {
+								return '<li>' . $field . '：' . get_post_meta($post->ID, $field, true) . '</li>';
+							}, $fields)) . '</ul>';
+					}
+
+					if (isset($fapiao_fields)) {
+						echo '<div class="fapiao"><h4>开票信息</h4><ul>' . implode(array_map(function ($field) use ($post) {
+								return '<li>' . $field . '：' . get_post_meta($post->ID, $field, true) . '</li>';
+							}, $fapiao_fields)) . '</ul></div>';
+					}
+					break;
 				case 'review' :
 					echo '<input type="hidden" name="confirmed" value="' . get_post_meta($post->ID, 'confirmed', true) . '">';
 				default;
 			}
 		});
+
+		add_filter('post_row_actions', function ($actions, $post) {
+			if ($post->post_type == "appointment") {
+				unset($actions['edit']);
+				unset($actions['inline hide-if-no-js']);
+				unset($actions['view']);
+			}
+			return $actions;
+		}, 10, 2);
 	}
 
 	protected static function add_admin_buttons () {
 		add_action('admin_footer', function () {
 			$screen = get_current_screen();
+			?>
+			<style>
+				.column-info { width: 30%; }
+				.column-info h4 { margin-bottom: 5px; }
+				.column-info ul { margin: 0; }
+			</style>
+			<?php
 			if ( $screen->post_type != 'appointment' )   // Only add to users.php page
 				return;
 			?>
