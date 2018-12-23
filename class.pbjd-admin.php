@@ -291,7 +291,7 @@ class PBJD_Admin {
 
 					if (isset($fapiao_fields)) {
 						echo '<div class="fapiao"><h4>开票信息</h4><ul>' . implode(array_map(function ($field) use ($post) {
-								return '<li>' . $field . '：' . get_post_meta($post->ID, $field, true) . '</li>';
+								return '<li>' . $field . '：' . get_post_meta($post->ID, '开票信息_' . $field, true) . '</li>';
 							}, $fapiao_fields)) . '</ul></div>';
 					}
 					break;
@@ -303,7 +303,6 @@ class PBJD_Admin {
 
 		add_filter('post_row_actions', function ($actions, $post) {
 			if ($post->post_type == "appointment") {
-				unset($actions['edit']);
 				unset($actions['inline hide-if-no-js']);
 				unset($actions['view']);
 			}
