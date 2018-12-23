@@ -290,7 +290,7 @@ class PBJD_Admin {
 					}
 
 					if (isset($fapiao_fields)) {
-						echo '<div class="fapiao"><h4>开票信息</h4><ul>' . implode(array_map(function ($field) use ($post) {
+						echo '<div class="fapiao"><h4><a href="#">开票信息</a></h4><ul>' . implode(array_map(function ($field) use ($post) {
 								return '<li>' . $field . '：' . get_post_meta($post->ID, '开票信息_' . $field, true) . '</li>';
 							}, $fapiao_fields)) . '</ul></div>';
 					}
@@ -313,13 +313,6 @@ class PBJD_Admin {
 	protected static function add_admin_buttons () {
 		add_action('admin_footer', function () {
 			$screen = get_current_screen();
-			?>
-			<style>
-				.column-info { width: 30%; }
-				.column-info h4 { margin-bottom: 5px; }
-				.column-info ul { margin: 0; }
-			</style>
-			<?php
 			if ( $screen->post_type != 'appointment' )   // Only add to users.php page
 				return;
 			?>
@@ -335,8 +328,18 @@ class PBJD_Admin {
 							$(this).append('<form method="POST"><input type="hidden" name="pbjd_confirm_appointment" value="' + postId + '"><input class="button" name="pbjd_confirm_appointment_yes" type="submit" value="确认"> <input class="button" type="submit" name="pbjd_confirm_appointment_no" value="拒绝"></form>');
 						}
 					});
+					$('.column-info .fapiao h4 a').click(function (e) {
+					    $(this).parent().next('ul').toggle();
+					    e.preventDefault();
+					});
 				});
 			</script>
+			<style>
+				.column-info { width: 30%; }
+				.column-info h4 { margin-bottom: 5px; }
+				.column-info ul { margin: 0; }
+				.column-info .fapiao ul { display: none; }
+			</style>
 			<?php
 		});
 
