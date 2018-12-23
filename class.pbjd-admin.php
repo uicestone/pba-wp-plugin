@@ -95,6 +95,11 @@ class PBJD_Admin {
 			),
 			'public' => true,
 			'supports' => array('custom-fields'),
+			'capability_type' => 'post',
+			'capabilities' => array(
+				'create_posts' => false
+			),
+			'map_meta_cap' => true,
 			'menu_icon' => 'dashicons-clock'
 		));
 	}
@@ -305,6 +310,7 @@ class PBJD_Admin {
 			if ($post->post_type == "appointment") {
 				unset($actions['inline hide-if-no-js']);
 				unset($actions['view']);
+				unset($actions['edit']);
 			}
 			return $actions;
 		}, 10, 2);
