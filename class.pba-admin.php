@@ -1,6 +1,6 @@
 <?php
 
-class PBJD_Admin {
+class PBA_Admin {
 
 	public static function init() {
 		self::register_post_types();
@@ -331,7 +331,7 @@ class PBJD_Admin {
                         } else if ($(this).find('[name="confirmed"]').val() === '0') {
                             $(this).append('<span>已拒绝</span>');
 						} else {
-							$(this).append('<form method="POST"><input type="hidden" name="pbjd_confirm_appointment" value="' + postId + '"><input class="button" name="pbjd_confirm_appointment_yes" type="submit" value="确认"> <input class="button" type="submit" name="pbjd_confirm_appointment_no" value="拒绝"></form>');
+							$(this).append('<form method="POST"><input type="hidden" name="pba_confirm_appointment" value="' + postId + '"><input class="button" name="pba_confirm_appointment_yes" type="submit" value="确认"> <input class="button" type="submit" name="pba_confirm_appointment_no" value="拒绝"></form>');
 						}
 					});
 					$('.column-info .fapiao h4 a').click(function (e) {
@@ -349,11 +349,11 @@ class PBJD_Admin {
 			<?php
 		});
 
-		if (isset($_POST['pbjd_confirm_appointment'])) {
-			$appointment_id = $_POST['pbjd_confirm_appointment'];
-			if (isset($_POST['pbjd_confirm_appointment_yes'])) {
+		if (isset($_POST['pba_confirm_appointment'])) {
+			$appointment_id = $_POST['pba_confirm_appointment'];
+			if (isset($_POST['pba_confirm_appointment_yes'])) {
 				update_post_meta($appointment_id, 'confirmed', 1);
-			} elseif (isset($_POST['pbjd_confirm_appointment_no'])) {
+			} elseif (isset($_POST['pba_confirm_appointment_no'])) {
 				update_post_meta($appointment_id, 'confirmed', 0);
 				$room_number = get_post_meta($appointment_id, 'room_number', true);
 				$room = get_posts(array('post_type' => 'room', 'meta_key' => 'number', 'meta_value' => $room_number))[0];

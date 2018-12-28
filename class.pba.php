@@ -1,6 +1,6 @@
 <?php
 
-class PBJD {
+class PBA {
 
 	/**
 	 * Attached to activate_{ plugin_basename( __FILES__ ) } by register_activation_hook()

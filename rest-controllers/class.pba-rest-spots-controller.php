@@ -1,6 +1,6 @@
 <?php
 
-class PBJD_REST_Spot_Controller extends WP_REST_Controller {
+class PBA_REST_Spot_Controller extends WP_REST_Controller {
 
 	public function __construct() {
 		$this->namespace = 'jddj/v1';
