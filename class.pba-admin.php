@@ -15,47 +15,47 @@ class PBA_Admin {
 
 		add_post_type_support('attachment', '');
 
-		register_post_type('speech', array(
-			'label' => '党建声音',
-			'labels' => array(
-				'all_items' => '所有党建声音',
-				'add_new' => '添加党建声音',
-				'add_new_item' => '新党建声音',
-				'not_found' => '未找到党建声音'
-			),
-			'public' => true,
-			'supports' => array('title'),
-			'menu_icon' => 'dashicons-megaphone',
-			'has_archive' => true
-		));
+		// register_post_type('speech', array(
+		// 	'label' => '党建声音',
+		// 	'labels' => array(
+		// 		'all_items' => '所有党建声音',
+		// 		'add_new' => '添加党建声音',
+		// 		'add_new_item' => '新党建声音',
+		// 		'not_found' => '未找到党建声音'
+		// 	),
+		// 	'public' => true,
+		// 	'supports' => array('title'),
+		// 	'menu_icon' => 'dashicons-megaphone',
+		// 	'has_archive' => true
+		// ));
 
-		register_post_type('motto', array(
-			'label' => '座右铭',
-			'labels' => array(
-				'all_items' => '所有座右铭',
-				'add_new' => '添加座右铭',
-				'add_new_item' => '新座右铭',
-				'not_found' => '未找到座右铭'
-			),
-			'public' => true,
-			'supports' => array('title', 'editor'),
-			'menu_icon' => 'dashicons-clipboard',
-			'has_archive' => true
-		));
+		// register_post_type('motto', array(
+		// 	'label' => '座右铭',
+		// 	'labels' => array(
+		// 		'all_items' => '所有座右铭',
+		// 		'add_new' => '添加座右铭',
+		// 		'add_new_item' => '新座右铭',
+		// 		'not_found' => '未找到座右铭'
+		// 	),
+		// 	'public' => true,
+		// 	'supports' => array('title', 'editor'),
+		// 	'menu_icon' => 'dashicons-clipboard',
+		// 	'has_archive' => true
+		// ));
 
-		register_post_type('spot', array(
-			'label' => '地图点',
-			'labels' => array(
-				'all_items' => '所有地图点',
-				'add_new' => '添加地图点',
-				'add_new_item' => '新地图点',
-				'not_found' => '未找到地图点'
-			),
-			'public' => true,
-			'supports' => array('title', 'editor'),
-			'menu_icon' => 'dashicons-location-alt',
-			'has_archive' => true
-		));
+		// register_post_type('spot', array(
+		// 	'label' => '地图点',
+		// 	'labels' => array(
+		// 		'all_items' => '所有地图点',
+		// 		'add_new' => '添加地图点',
+		// 		'add_new_item' => '新地图点',
+		// 		'not_found' => '未找到地图点'
+		// 	),
+		// 	'public' => true,
+		// 	'supports' => array('title', 'editor'),
+		// 	'menu_icon' => 'dashicons-location-alt',
+		// 	'has_archive' => true
+		// ));
 
 		register_post_type('room', array(
 			'label' => '场馆',
@@ -233,12 +233,12 @@ class PBA_Admin {
 		});
 
 		add_filter('manage_appointment_posts_columns', function ($columns) {
-			$columns['type'] = '类型';
-			$columns['target'] = '场馆/活动';
-			$columns['datetime'] = '日期时间';
+			// $columns['type'] = '类型';
+			$columns['target'] = '活动';
+			// $columns['datetime'] = '日期时间';
 			$columns['contact'] = '联系人';
 			$columns['phone'] = '联系电话';
-			$columns['info'] = '其他信息';
+			// $columns['info'] = '其他信息';
 			$columns['review'] = '审核';
 			unset($columns['title']);
 			unset($columns['date']);
