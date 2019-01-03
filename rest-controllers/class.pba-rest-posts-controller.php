@@ -103,8 +103,8 @@ class PBA_REST_Post_Controller extends WP_REST_Controller {
 				'updatedAt' => $post->post_modified
 			);
 
-			if (in_array('月度菜单', $categories)) {
-				$item['date'] = get_post_meta($post->ID, 'date', true);
+			if ($date = get_post_meta($post->ID, 'date', true)) {
+				$item['date'] = $date;
 			}
 
 			return (object) $item;
