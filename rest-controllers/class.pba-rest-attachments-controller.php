@@ -48,6 +48,13 @@ class PBA_REST_Attachment_Controller extends WP_REST_Controller {
 
 		$posts = get_posts($parameters);
 
+		$parameters_all = $parameters;
+		$parameters_all['posts_per_page'] = -1;
+		unset($parameters_all['paged']);
+		$posts_all = get_posts($parameters_all);
+		$posts_all_count = count($posts_all);
+		header('X-WP-TotalPages: ' . ceil($posts_all_count / $parameters['posts_per_page']));
+
 		$items = array_map(function (WP_Post $post) {
 			$mime = get_post_mime_type($post->ID);
 			preg_match('/^(.*)\//', $mime, $matches);
