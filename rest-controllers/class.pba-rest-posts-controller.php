@@ -71,7 +71,7 @@ class PBA_REST_Post_Controller extends WP_REST_Controller {
 			}, get_the_category($post->ID));
 
 			$content = do_shortcode(wptexturize(wpautop($post->post_content)));
-			$posterUrl = get_the_post_thumbnail_url($post->ID) ?: null;
+			$posterUrl = get_the_post_thumbnail_url($post->ID, 'large') ?: null;
 
 			if ($cdn_url = constant('CDN_URL')) {
 				if ($posterUrl) {
@@ -110,6 +110,7 @@ class PBA_REST_Post_Controller extends WP_REST_Controller {
 			return (object) $item;
 
 		}, $posts);
+
 
 		return rest_ensure_response($items);
 
