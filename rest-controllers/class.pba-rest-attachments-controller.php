@@ -60,9 +60,13 @@ class PBA_REST_Attachment_Controller extends WP_REST_Controller {
 			preg_match('/^(.*)\//', $mime, $matches);
 			$type = $matches[1];
 			$url = wp_get_attachment_url($post->ID);
+			$posterUrl = get_the_post_thumbnail_url($post->ID, 'large') ?: null;
 
 			if ($cdn_url = constant('CDN_URL')) {
 				$url = preg_replace('/' . preg_quote(site_url(), '/') . '\//', $cdn_url, $url);
+				if ($posterUrl) {
+					$posterUrl = preg_replace('/' . preg_quote(site_url(), '/') . '\//', $cdn_url, $posterUrl);
+				}
 			}
 
 			$item = array(
@@ -74,6 +78,7 @@ class PBA_REST_Attachment_Controller extends WP_REST_Controller {
 					return $category->name;
 				}, get_the_category($post->ID)),
 				'url' => $url,
+				'posterUrl' => $posterUrl,
 				'createdAt' => $post->post_date,
 				'updatedAt' => $post->post_modified
 			);
