@@ -155,6 +155,10 @@ class PBA_REST_Speech_Controller extends WP_REST_Controller {
 			update_post_meta($id, 'author_town', $data->authorTown);
 		}
 
+		if (isset($data->authorMobile)) {
+			update_post_meta($id, 'author_mobile', $data->authorMobile);
+		}
+
 		$speech = array(
 			'id' => $post->ID,
 			'type' => get_post_meta($post->ID, 'type', true),

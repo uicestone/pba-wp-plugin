@@ -83,6 +83,7 @@ class PBA_REST_Motto_Controller extends WP_REST_Controller {
 		$files =  $request->get_file_params();
 		$body = $request->get_body_params();
 		$author_name = $body['authorName'];
+		$author_mobile = $body['authorMobile'];
 		$text = $body['text'];
 
 		if (!$author_name) {
@@ -113,6 +114,7 @@ class PBA_REST_Motto_Controller extends WP_REST_Controller {
 
 		add_post_meta($motto_id, 'image_url', $file['url']);
 		add_post_meta($motto_id, 'author_name', $author_name);
+		add_post_meta($motto_id, 'author_mobile', $author_mobile);
 
 		return rest_ensure_response(array(
 			'id' => $motto_id,
