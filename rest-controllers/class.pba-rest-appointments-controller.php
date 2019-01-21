@@ -69,10 +69,10 @@ class PBA_REST_Appointment_Controller extends WP_REST_Controller {
 		if ($body['type'] === '参观预约') {
 			$room_number = 0;
 		} elseif ($body['type'] === '场馆预约') {
-			if (!$body['room_numer']) {
+			if (!$body['room_number']) {
 				return rest_ensure_response(new WP_Error(400, 'Missing appointment room number.'));
 			}
-			$room_number = $body['room_numer'];
+			$room_number = $body['room_number'];
 		}
 
 		if (isset($room_number)) {

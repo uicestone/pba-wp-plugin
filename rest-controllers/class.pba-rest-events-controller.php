@@ -60,14 +60,16 @@ class PBA_REST_Event_Controller extends WP_REST_Controller {
 
 			$posterUrl = get_the_post_thumbnail_url($post->ID) ?: null;
 
-			if ($cdn_url = constant('CDN_URL')) {
+			if (defined('CDN_URL')) {
+				$cdn_url = constant('CDN_URL');
 				if ($posterUrl) {
 					$posterUrl = preg_replace('/' . preg_quote(site_url(), '/') . '\//', $cdn_url, $posterUrl);
 				}
 				$content = preg_replace('/src="' . preg_quote(site_url(), '/') . '\/(.*?)\.(jpg|png|gif|mp3|mp4)"/', 'src="' . $cdn_url . '$1.$2"', $content);
 			}
 
-			if ($cdn_url_qpic = constant('CDN_URL_QPIC')) {
+			if (defined('CDN_URL_QPIC')) {
+				$cdn_url_qpic = constant('CDN_URL_QPIC');
 				$content = preg_replace('/https?:\/\/mmbiz.qpic.cn\//', $cdn_url_qpic, $content);
 			}
 

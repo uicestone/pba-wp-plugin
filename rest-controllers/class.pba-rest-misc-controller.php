@@ -191,7 +191,7 @@ class PBA_REST_Misc_Controller extends WP_REST_Controller {
 	 * @param WP_REST_Request $request
 	 * @return WP_Error|WP_REST_Response
 	 */
-	public static function get_my_sign_in( $request )
+	public static function r( $request )
 	{
 		$token = $_SERVER['HTTP_AUTHORIZATION'];
 		$token_parts = explode(' ', $token);
@@ -241,9 +241,38 @@ class PBA_REST_Misc_Controller extends WP_REST_Controller {
 			)));
 
 			$appointments = array_map(function($post) {
-				return array(
-					'target' => get_post_meta($post->ID, 'target', true)
-				);
+				$display = array('fields' => array(), 'status' => '');
+				$type = get_post_meta($post->ID, 'type', true);
+				if ($type === '活动报名') {
+					$event_id = get_post_meta($post->ID, 'event_id', true);
+					$display['fields'][] = get_the_title($event_id);
+				} elseif ($type === '参观预约') {
+					$display['fields'][] = '参观党建服务中心';
+				} elseif ($type === '场馆预约') {
+					$display['fields'][] = get_post_meta($post->ID, '会议室/培训室', true);
+				}
+
+				if ($unit = get_post_meta($post->ID, '单位名称', true)) {
+					$display['fields'][] = $unit;
+				}
+
+				$date = get_post_meta($post->ID, '预约日期', true);
+				$time = get_post_meta($post->ID, '预约时间', true);
+
+				if ($date && $time) {
+					$display['fields'][] = $date . ' ' . $time;
+				}
+
+				if ($attendees = get_post_meta($post->ID, '参加人数', true)) {
+					$display['fields'][] = $attendees . '人';
+				}
+
+				$confirmed = get_post_meta($post->ID, 'confirmed', true);
+
+				$display['status'] = $confirmed ? '已确认' : '待审核';
+
+				return $display;
+
 			}, $posts);
 
 			return rest_ensure_response($appointments);
