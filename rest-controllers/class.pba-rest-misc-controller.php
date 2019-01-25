@@ -128,7 +128,7 @@ class PBA_REST_Misc_Controller extends WP_REST_Controller {
 			$user_id = $users_matched[0]->ID;
 		}
 		elseif(empty($user_id)) {
-			return rest_ensure_response(new WP_Error(400, '匹配用户错误', $data));
+			return rest_ensure_response(new WP_Error(401, '匹配用户错误', $data));
 		}
 
 		$member_info = array(
@@ -207,7 +207,7 @@ class PBA_REST_Misc_Controller extends WP_REST_Controller {
 				$user_id = $users_matched[0]->ID;
 			}
 			elseif(empty($user_id)) {
-				return rest_ensure_response(new WP_Error(400, '匹配用户错误'));
+				return rest_ensure_response(new WP_Error(401, '匹配用户错误'));
 			}
 
 			$user_data = array();
