@@ -6,6 +6,8 @@ class PBA_REST_Misc_Controller extends WP_REST_Controller {
 		$this->namespace = 'jddj/v1';
 	}
 
+	public static $user_fields = array('name', 'unit', 'organization', 'sex', 'residence', 'speciality', 'id_card' => 'idCard', 'mobile');
+
 	/**
 	 * Register the REST API routes.
 	 */
@@ -129,13 +131,11 @@ class PBA_REST_Misc_Controller extends WP_REST_Controller {
 			return rest_ensure_response(new WP_Error(400, '匹配用户错误', $data));
 		}
 
-		$user_fields = array('name', 'id_card' => 'idCard', 'mobile', 'unit', 'organization', 'sex', 'residence', 'speciality');
-
 		$member_info = array(
 			'id' => $user_id
 		);
 
-		foreach ($user_fields as $store_key => $input_key) {
+		foreach (self::$user_fields as $store_key => $input_key) {
 			if (is_numeric($store_key)) {
 				$store_key = $input_key;
 			}
@@ -191,7 +191,7 @@ class PBA_REST_Misc_Controller extends WP_REST_Controller {
 	 * @param WP_REST_Request $request
 	 * @return WP_Error|WP_REST_Response
 	 */
-	public static function r( $request )
+	public static function get_my_sign_in( $request )
 	{
 		$token = $_SERVER['HTTP_AUTHORIZATION'];
 		$token_parts = explode(' ', $token);
@@ -210,12 +210,14 @@ class PBA_REST_Misc_Controller extends WP_REST_Controller {
 				return rest_ensure_response(new WP_Error(400, '匹配用户错误'));
 			}
 
-			$user_fields = array('name', 'unit', 'organization');
-
 			$user_data = array();
 
-			foreach ($user_fields as $user_field) {
-				$user_data[$user_field] = get_user_meta($user_id, $user_field, true);
+			foreach (self::$user_fields as $store_key => $output_key) {
+				if (is_numeric($store_key)) {
+					$store_key = $output_key;
+				}
+
+				$user_data[$output_key] = get_user_meta($user_id, $store_key, true);
 			}
 
 			return rest_ensure_response($user_data);
@@ -314,4 +316,5 @@ class PBA_REST_Misc_Controller extends WP_REST_Controller {
 
 		}
 	}
+
 }
