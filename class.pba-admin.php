@@ -240,6 +240,7 @@ class PBA_Admin {
 			$columns['phone'] = '联系电话';
 			$columns['info'] = '其他信息';
 			$columns['review'] = '审核';
+			$columns['post_time'] = '提交时间';
 			unset($columns['title']);
 			unset($columns['date']);
 			return $columns;
@@ -302,6 +303,10 @@ class PBA_Admin {
 					break;
 				case 'review' :
 					echo '<input type="hidden" name="confirmed" value="' . get_post_meta($post->ID, 'confirmed', true) . '">';
+					break;
+				case 'post_time' :
+					echo get_the_date('Y-m-d H:i:s', $post->ID);
+					break;
 				default;
 			}
 		});
