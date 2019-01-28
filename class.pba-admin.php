@@ -235,10 +235,11 @@ class PBA_Admin {
 		add_filter('manage_appointment_posts_columns', function ($columns) {
 			// $columns['type'] = '类型';
 			$columns['target'] = '活动';
-			// $columns['datetime'] = '日期时间';
+			$columns['datetime'] = '日期时间';
 			$columns['contact'] = '联系人';
 			$columns['phone'] = '联系电话';
-			// $columns['info'] = '其他信息';
+			$columns['info'] = '其他信息';
+			$columns['post_time'] = '提交时间';
 			$columns['review'] = '审核';
 			unset($columns['title']);
 			unset($columns['date']);
@@ -254,8 +255,7 @@ class PBA_Admin {
 					break;
 				case 'target' :
 					if ($type === '活动报名') {
-						$event_id = get_post_meta($post->ID, 'event_id', true);
-						echo get_the_title($event_id);
+						echo get_post_meta($post->ID, '活动名称', true);
 					} elseif ($type === '参观预约') {
 						echo '参观党建服务中心';
 					} elseif ($type === '场馆预约') {
@@ -286,6 +286,8 @@ class PBA_Admin {
 							$fields = ['单位名称', '活动名称', '参加人数', '备注'];
 							$fapiao_fields = ['公司名称', '税号', '账号', '开户银行', '单位地址'];
 						}
+					} elseif ($type === '活动报名') {
+						$fields = ['预约单位', '参加人数'];
 					}
 
 					if (isset($fields)) {
@@ -300,8 +302,12 @@ class PBA_Admin {
 							}, $fapiao_fields)) . '</ul></div>';
 					}
 					break;
+				case 'post_time':
+					echo get_the_date('Y-m-d H:i:s', $post->ID);
+					break;
 				case 'review' :
 					echo '<input type="hidden" name="confirmed" value="' . get_post_meta($post->ID, 'confirmed', true) . '">';
+					break;
 				default;
 			}
 		});
