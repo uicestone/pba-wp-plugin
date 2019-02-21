@@ -6,6 +6,7 @@ require_once( PBA__PLUGIN_DIR . 'rest-controllers/class.pba-rest-cpc-review-cont
 require_once( PBA__PLUGIN_DIR . 'rest-controllers/class.pba-rest-events-controller.php' );
 require_once( PBA__PLUGIN_DIR . 'rest-controllers/class.pba-rest-misc-controller.php' );
 require_once( PBA__PLUGIN_DIR . 'rest-controllers/class.pba-rest-mottoes-controller.php' );
+require_once( PBA__PLUGIN_DIR . 'rest-controllers/class.pba-rest-organizations-controller.php' );
 require_once( PBA__PLUGIN_DIR . 'rest-controllers/class.pba-rest-posts-controller.php' );
 require_once( PBA__PLUGIN_DIR . 'rest-controllers/class.pba-rest-rooms-controller.php' );
 require_once( PBA__PLUGIN_DIR . 'rest-controllers/class.pba-rest-speeches-controller.php' );
@@ -20,6 +21,7 @@ class PBA_REST_API {
 		(new PBA_REST_Event_Controller())->register_routes();
 		(new PBA_REST_Misc_Controller())->register_routes();
 		(new PBA_REST_Motto_Controller())->register_routes();
+		(new PBA_REST_Organizations_Controller())->register_routes();
 		(new PBA_REST_Post_Controller())->register_routes();
 		(new PBA_REST_Room_Controller())->register_routes();
 		(new PBA_REST_Speech_Controller())->register_routes();

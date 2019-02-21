@@ -334,3 +334,39 @@ Response Body:
 ]
 ```
 
+获得场馆/房间列表
+---
+GET `jddj/v1/rooms`
+
+Response Body:
+```json
+[
+  {
+    "floor": 1,
+    "number": "101",
+    "title": "接待大厅",
+    "color": "#e79b32"
+  }
+]
+```
+
+获得群团组织
+---
+GET `jddj/v1/organizations`
+
+Response Body:
+```json
+[
+  {
+    "id": 4360,
+    "title": "区团委",
+    "posterUrl": "",
+    "departments": [
+      {
+        "title": "共青团嘉定区委员会",
+        "posterUrl": ""
+      }
+    ]
+  }
+]
+```
