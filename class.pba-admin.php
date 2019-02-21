@@ -57,6 +57,20 @@ class PBA_Admin {
 			'has_archive' => true
 		));
 
+		register_post_type('organization', array(
+			'label' => '群团组织',
+			'labels' => array(
+				'all_items' => '所有群团组织',
+				'add_new' => '添加群团组织',
+				'add_new_item' => '新群团组织',
+				'not_found' => '未找到群团组织'
+			),
+			'public' => true,
+			'supports' => array('title', 'thumbnail'),
+			'menu_icon' => 'dashicons-groups',
+			'has_archive' => true
+		));
+
 		register_post_type('room', array(
 			'label' => '场馆',
 			'labels' => array(
