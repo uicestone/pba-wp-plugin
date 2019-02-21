@@ -207,6 +207,7 @@ Request Body:
   "authorName":"",
   "authorTown":""
 }
+```
 
 Response Body: 
 ```json
@@ -306,3 +307,30 @@ Response Body:
   "liveVideoUrl":""
 }
 ```
+
+获得党建地图配置
+---
+GET `jddj/v1/spots/config`
+
+Response Body: 
+```json
+{
+  "homeButtons": [],
+  "spotTypes": [
+    {"icon": "[图标URL]", "text": ""}
+  ]
+}
+```
+
+获得党建概况图片
+---
+GET `jddj/v1/intro`
+
+Response Body: 
+```json
+[
+  ["<封面URL>"],
+  ["<第一章 图1URL>", "<第一章 图2URL>"]
+]
+```
+

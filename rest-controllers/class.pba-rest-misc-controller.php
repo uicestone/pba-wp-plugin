@@ -62,13 +62,6 @@ class PBA_REST_Misc_Controller extends WP_REST_Controller {
 			)
 		) );
 
-		register_rest_route( $this->namespace, '/map-config', array(
-			array(
-				'methods' => WP_REST_Server::READABLE,
-				'callback' => array( $this, 'get_map_config' ),
-			)
-		) );
-
 		register_rest_route( $this->namespace, '/intro', array(
 			array(
 				'methods' => WP_REST_Server::READABLE,
@@ -329,38 +322,6 @@ class PBA_REST_Misc_Controller extends WP_REST_Controller {
 			return rest_ensure_response($speeches);
 
 		}
-	}
-
-	/**
-	 * Map menus, types, etc.
-	 *
-	 * @param WP_REST_Request $request
-	 * @return WP_Error|WP_REST_Response
-	 */
-	public static function get_map_config($request) {
-		$spot_config = get_page_by_path('config', 'OBJECT', 'spot');
-
-		$button_urls = array_map(function ($item) use ($spot_config) {
-			return get_field('home_button_' . $item, $spot_config->ID);
-		}, array('1', '2', '3', '4'));
-
-		$spot_types = array_map(function ($item) use ($spot_config) {
-			$text = get_field('spot_type_' . $item, $spot_config->ID);
-			$result = array(
-				'icon' => get_field('spot_type_icon_' . $item, $spot_config->ID),
-				'text' => $text
-			);
-
-			if ($item > 2) {
-				$result['type'] = $text;
-			}
-			return $result;
-		}, array('1', '2', '3', '4', '5'));
-
-		return rest_ensure_response(array(
-			'homeButtons' => $button_urls,
-			'spotTypes' => $spot_types
-		));
 	}
 
 	/**
