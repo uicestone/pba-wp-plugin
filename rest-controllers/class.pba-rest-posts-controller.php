@@ -18,6 +18,13 @@ class PBA_REST_Post_Controller extends WP_REST_Controller {
 				'callback' => array( $this, 'get_posts' ),
 			)
 		) );
+
+		register_rest_route( $this->namespace, '/' . $this->rest_base . '/(?P<id>.+)', array(
+			array(
+				'methods' => WP_REST_Server::READABLE,
+				'callback' => array( $this, 'get_post' ),
+			)
+		) );
 	}
 
 	/**
@@ -121,6 +128,69 @@ class PBA_REST_Post_Controller extends WP_REST_Controller {
 		}, $posts);
 
 		return rest_ensure_response($items);
+
+	}
+
+	/**
+	 * Get single post detail
+	 * @param WP_REST_Request $request
+	 * @return WP_Error|WP_REST_Response
+	 */
+	public static function get_post( $request ) {
+
+		$id = $request->get_param('id');
+		$post = get_post($id);
+
+		$author = get_user_by('ID', $post->post_author);
+		$town_category = get_category_by_slug('town');
+		$town = null;
+		$categories = array_map(function ($category) use (&$town, $town_category) {
+			if ($category->parent === $town_category->cat_ID) {
+				$town = $category->name;
+			}
+			return $category->name;
+		}, get_the_category($post->ID));
+
+		$content = do_shortcode(wptexturize(wpautop($post->post_content)));
+		$posterUrl = get_the_post_thumbnail_url($post->ID) ?: null;
+
+		if (defined('CDN_URL')) {
+			$cdn_url = constant('CDN_URL');
+			if ($posterUrl) {
+				$posterUrl = preg_replace('/' . preg_quote(site_url(), '/') . '\//', $cdn_url, $posterUrl);
+			}
+			$content = preg_replace('/src="' . preg_quote(site_url(), '/') . '\/(.*?)\.(jpg|png|gif|mp3|mp4)"/', 'src="' . $cdn_url . '$1.$2"', $content);
+		}
+
+		if (defined('CDN_URL_QPIC')) {
+			$cdn_url_qpic = constant('CDN_URL_QPIC');
+			$content = preg_replace('/https?:\/\/mmbiz.qpic.cn\//', $cdn_url_qpic, $content);
+		}
+
+		$item = array(
+			'id' => $post->ID,
+			'title' => get_the_title($post->ID),
+			'excerpt' => get_the_excerpt($post->ID),
+			'content' => $content,
+			'status' => $post->post_status,
+			'slug' => $post->post_name,
+			'posterUrl' => $posterUrl,
+			'categories' => $categories,
+			'town' => $town,
+			'author' => (object) array(
+				'id' => $author->ID,
+				'name' => $author->display_name,
+				'roles' => $author->roles
+			),
+			'createdAt' => $post->post_date,
+			'updatedAt' => $post->post_modified
+		);
+
+		if ($date = get_post_meta($post->ID, 'date', true)) {
+			$item['date'] = $date;
+		}
+
+		return rest_ensure_response($item);
 
 	}
 

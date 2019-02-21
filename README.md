@@ -14,6 +14,33 @@ GET `/jddj/v1/posts/?category=:slug&limit=:limit&page=:page&order=:order&orderby
 
 Response Body: 
 ```json
+[{
+  "id":"",
+  "title":"",
+  "excerpt":"",
+  "content":"",
+  "status":"",
+  "slug":"",
+  "posterUrl":"",
+  "categories":[""],
+  "town":"",
+  "date":"2018-01-01", // 仅当categories包含"月度菜单"时有此属性
+  "author":{
+    "id":"",
+    "name":"",
+    "roles":[]
+  },
+  "createdAt":"",
+  "updatedAt":""
+}]
+```
+
+获取文章详情
+---
+GET `/jddj/v1/posts/:id`
+
+Response Body: 
+```json
 {
   "id":"",
   "title":"",
