@@ -61,6 +61,21 @@ class PBA_REST_Misc_Controller extends WP_REST_Controller {
 				'callback' => array( $this, 'get_my_speech' ),
 			)
 		) );
+
+		register_rest_route( $this->namespace, '/map-config', array(
+			array(
+				'methods' => WP_REST_Server::READABLE,
+				'callback' => array( $this, 'get_map_config' ),
+			)
+		) );
+
+		register_rest_route( $this->namespace, '/intro', array(
+			array(
+				'methods' => WP_REST_Server::READABLE,
+				'callback' => array( $this, 'get_intro' ),
+			)
+		) );
+
 	}
 
 	/**
@@ -230,8 +245,7 @@ class PBA_REST_Misc_Controller extends WP_REST_Controller {
 	 * @param WP_REST_Request $request
 	 * @return WP_Error|WP_REST_Response
 	 */
-	public static function get_my_yuyue( $request )
-	{
+	public static function get_my_yuyue( $request ) {
 		$token = $_SERVER['HTTP_AUTHORIZATION'];
 		$token_parts = explode(' ', $token);
 		$mobile = $token_parts[0];
@@ -242,7 +256,7 @@ class PBA_REST_Misc_Controller extends WP_REST_Controller {
 				array('key' => '联系电话', 'value' => $mobile)
 			)));
 
-			$appointments = array_map(function($post) {
+			$appointments = array_map(function ($post) {
 				$display = array('fields' => array(), 'status' => '');
 				$type = get_post_meta($post->ID, 'type', true);
 				if ($type === '活动报名') {
@@ -315,6 +329,67 @@ class PBA_REST_Misc_Controller extends WP_REST_Controller {
 			return rest_ensure_response($speeches);
 
 		}
+	}
+
+	/**
+	 * Map menus, types, etc.
+	 *
+	 * @param WP_REST_Request $request
+	 * @return WP_Error|WP_REST_Response
+	 */
+	public static function get_map_config($request) {
+		$spot_config = get_page_by_path('config', 'OBJECT', 'spot');
+
+		$button_urls = array_map(function ($item) use ($spot_config) {
+			return get_field('home_button_' . $item, $spot_config->ID);
+		}, array('1', '2', '3', '4'));
+
+		$spot_types = array_map(function ($item) use ($spot_config) {
+			$text = get_field('spot_type_' . $item, $spot_config->ID);
+			$result = array(
+				'icon' => get_field('spot_type_icon_' . $item, $spot_config->ID),
+				'text' => $text
+			);
+
+			if ($item > 2) {
+				$result['type'] = $text;
+			}
+			return $result;
+		}, array('1', '2', '3', '4', '5'));
+
+		return rest_ensure_response(array(
+			'homeButtons' => $button_urls,
+			'spotTypes' => $spot_types
+		));
+	}
+
+	/**
+	 * Map menus, types, etc.
+	 *
+	 * @param WP_REST_Request $request
+	 * @return WP_Error|WP_REST_Response
+	 */
+	public static function get_intro($request) {
+		$intro_page = get_page_by_path('intro');
+
+		preg_match_all('/\<img.*?>/', $intro_page->post_content, $matches);
+
+		$images = $matches[0];
+
+		$slides = array(array());
+
+		foreach ($images as $image) {
+			preg_match('/ alt="(.*?)"/', $image, $match_alt);
+			preg_match('/ src="(.*?)"/', $image, $match_url);
+			$url = $match_url[1];
+
+			if ($match_alt && $alt = $match_alt[1]) {
+				$slides[] = array();
+			}
+			$slides[count($slides)-1][] = $url;
+		}
+
+		return rest_ensure_response($slides);
 	}
 
 }
