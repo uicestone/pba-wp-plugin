@@ -139,7 +139,12 @@ class PBA_REST_Post_Controller extends WP_REST_Controller {
 	public static function get_post( $request ) {
 
 		$id = $request->get_param('id');
-		$post = get_post($id);
+
+		if (is_numeric($id)) {
+			$post = get_post($id);
+		} else {
+			$post = get_page_by_path($id);
+		}
 
 		$author = get_user_by('ID', $post->post_author);
 		$town_category = get_category_by_slug('town');
