@@ -81,7 +81,8 @@ class PBA_REST_Spot_Controller extends WP_REST_Controller {
 			$text = get_field('spot_type_' . $item, $spot_config->ID);
 			$result = array(
 				'icon' => get_field('spot_type_icon_' . $item, $spot_config->ID),
-				'text' => $text
+				'text' => $text,
+				'buttonIndex' => (int)$item
 			);
 
 			if ($item > 2) {
@@ -90,9 +91,12 @@ class PBA_REST_Spot_Controller extends WP_REST_Controller {
 			return $result;
 		}, array('1', '2', '3', '4', '5'));
 
+		$center_intro_text = get_post_meta($spot_config->ID, 'center_intro_text', true);
+
 		return rest_ensure_response(array(
 			'homeButtons' => $button_urls,
-			'spotTypes' => $spot_types
+			'spotTypes' => $spot_types,
+			'centerIntroText' => $center_intro_text
 		));
 	}
 
