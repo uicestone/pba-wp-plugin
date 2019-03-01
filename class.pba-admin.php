@@ -15,107 +15,107 @@ class PBA_Admin {
 
 		add_post_type_support('attachment', '');
 
-		register_post_type('speech', array(
-			'label' => '党建声音',
-			'labels' => array(
-				'all_items' => '所有党建声音',
-				'add_new' => '添加党建声音',
-				'add_new_item' => '新党建声音',
-				'not_found' => '未找到党建声音'
-			),
-			'public' => true,
-			'supports' => array('title'),
-			'menu_icon' => 'dashicons-megaphone',
-			'has_archive' => true
-		));
-
-		register_post_type('motto', array(
-			'label' => '座右铭',
-			'labels' => array(
-				'all_items' => '所有座右铭',
-				'add_new' => '添加座右铭',
-				'add_new_item' => '新座右铭',
-				'not_found' => '未找到座右铭'
-			),
-			'public' => true,
-			'supports' => array('title', 'editor'),
-			'menu_icon' => 'dashicons-clipboard',
-			'has_archive' => true
-		));
-
-		register_post_type('spot', array(
-			'label' => '地图点',
-			'labels' => array(
-				'all_items' => '所有地图点',
-				'add_new' => '添加地图点',
-				'add_new_item' => '新地图点',
-				'not_found' => '未找到地图点'
-			),
-			'public' => true,
-			'supports' => array('title', 'editor'),
-			'menu_icon' => 'dashicons-location-alt',
-			'has_archive' => true
-		));
-
-		register_post_type('organization', array(
-			'label' => '群团组织',
-			'labels' => array(
-				'all_items' => '所有群团组织',
-				'add_new' => '添加群团组织',
-				'add_new_item' => '新群团组织',
-				'not_found' => '未找到群团组织'
-			),
-			'public' => true,
-			'supports' => array('title', 'thumbnail'),
-			'menu_icon' => 'dashicons-groups',
-			'has_archive' => true
-		));
-
-		register_post_type('room', array(
-			'label' => '场馆',
-			'labels' => array(
-				'all_items' => '所有场馆',
-				'add_new' => '添加场馆',
-				'add_new_item' => '新场馆',
-				'not_found' => '未找到场馆'
-			),
-			'public' => true,
-			'supports' => array('title', 'editor', 'thumbnail'),
-			'menu_icon' => 'dashicons-admin-home',
-			'has_archive' => true
-		));
-
-		register_post_type('event', array(
-			'label' => '活动',
-			'labels' => array(
-				'all_items' => '所有活动',
-				'add_new' => '添加活动',
-				'add_new_item' => '新活动',
-				'not_found' => '未找到活动'
-			),
-			'public' => true,
-			'supports' => array('title', 'editor', 'thumbnail'),
-			'menu_icon' => 'dashicons-calendar-alt',
-			'has_archive' => true
-		));
-
-		register_post_type('appointment', array(
-			'label' => '预约报名',
-			'labels' => array(
-				'all_items' => '所有预约报名',
-				'add_new' => '添加预约报名',
-				'add_new_item' => '新预约报名',
-				'not_found' => '未找到预约报名'
-			),
-			'public' => true,
-			'supports' => array('custom-fields'),
-			'capability_type' => 'post',
-			'capabilities' => array(
-				'create_posts' => false
-			),
-			'map_meta_cap' => true,
-			'menu_icon' => 'dashicons-clock'
-		));
+		// register_post_type('speech', array(
+		// 	'label' => '党建声音',
+		// 	'labels' => array(
+		// 		'all_items' => '所有党建声音',
+		// 		'add_new' => '添加党建声音',
+		// 		'add_new_item' => '新党建声音',
+		// 		'not_found' => '未找到党建声音'
+		// 	),
+		// 	'public' => true,
+		// 	'supports' => array('title'),
+		// 	'menu_icon' => 'dashicons-megaphone',
+		// 	'has_archive' => true
+		// ));
+		//
+		// register_post_type('motto', array(
+		// 	'label' => '座右铭',
+		// 	'labels' => array(
+		// 		'all_items' => '所有座右铭',
+		// 		'add_new' => '添加座右铭',
+		// 		'add_new_item' => '新座右铭',
+		// 		'not_found' => '未找到座右铭'
+		// 	),
+		// 	'public' => true,
+		// 	'supports' => array('title', 'editor'),
+		// 	'menu_icon' => 'dashicons-clipboard',
+		// 	'has_archive' => true
+		// ));
+		//
+		// register_post_type('spot', array(
+		// 	'label' => '地图点',
+		// 	'labels' => array(
+		// 		'all_items' => '所有地图点',
+		// 		'add_new' => '添加地图点',
+		// 		'add_new_item' => '新地图点',
+		// 		'not_found' => '未找到地图点'
+		// 	),
+		// 	'public' => true,
+		// 	'supports' => array('title', 'editor'),
+		// 	'menu_icon' => 'dashicons-location-alt',
+		// 	'has_archive' => true
+		// ));
+		//
+		// register_post_type('organization', array(
+		// 	'label' => '群团组织',
+		// 	'labels' => array(
+		// 		'all_items' => '所有群团组织',
+		// 		'add_new' => '添加群团组织',
+		// 		'add_new_item' => '新群团组织',
+		// 		'not_found' => '未找到群团组织'
+		// 	),
+		// 	'public' => true,
+		// 	'supports' => array('title', 'thumbnail'),
+		// 	'menu_icon' => 'dashicons-groups',
+		// 	'has_archive' => true
+		// ));
+		//
+		// register_post_type('room', array(
+		// 	'label' => '场馆',
+		// 	'labels' => array(
+		// 		'all_items' => '所有场馆',
+		// 		'add_new' => '添加场馆',
+		// 		'add_new_item' => '新场馆',
+		// 		'not_found' => '未找到场馆'
+		// 	),
+		// 	'public' => true,
+		// 	'supports' => array('title', 'editor', 'thumbnail'),
+		// 	'menu_icon' => 'dashicons-admin-home',
+		// 	'has_archive' => true
+		// ));
+		//
+		// register_post_type('event', array(
+		// 	'label' => '活动',
+		// 	'labels' => array(
+		// 		'all_items' => '所有活动',
+		// 		'add_new' => '添加活动',
+		// 		'add_new_item' => '新活动',
+		// 		'not_found' => '未找到活动'
+		// 	),
+		// 	'public' => true,
+		// 	'supports' => array('title', 'editor', 'thumbnail'),
+		// 	'menu_icon' => 'dashicons-calendar-alt',
+		// 	'has_archive' => true
+		// ));
+		//
+		// register_post_type('appointment', array(
+		// 	'label' => '预约报名',
+		// 	'labels' => array(
+		// 		'all_items' => '所有预约报名',
+		// 		'add_new' => '添加预约报名',
+		// 		'add_new_item' => '新预约报名',
+		// 		'not_found' => '未找到预约报名'
+		// 	),
+		// 	'public' => true,
+		// 	'supports' => array('custom-fields'),
+		// 	'capability_type' => 'post',
+		// 	'capabilities' => array(
+		// 		'create_posts' => false
+		// 	),
+		// 	'map_meta_cap' => true,
+		// 	'menu_icon' => 'dashicons-clock'
+		// ));
 	}
 
 	protected static function manage_admin_columns ()
