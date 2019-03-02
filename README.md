@@ -3,7 +3,7 @@ Server APIs
 
 获取文章列表
 ---
-GET `/jddj/v1/posts/?category=:slug&limit=:limit&page=:page&order=:order&orderby=:orderby&month=:yearMonth`
+GET `/pba/v1/posts/?category=:slug&limit=:limit&page=:page&order=:order&orderby=:orderby&month=:yearMonth`
 
 `:slug`: category名称
 `:limit`: 获得条数，默认为5，-1为不限制
@@ -37,7 +37,7 @@ Response Body:
 
 获取文章详情
 ---
-GET `/jddj/v1/posts/:id`
+GET `/pba/v1/posts/:id`
 
 Response Body: 
 ```json
@@ -64,7 +64,7 @@ Response Body:
 
 获取附件列表
 ---
-GET `/jddj/v1/attachments/?category=:slug&limit=:limit&page=:page&order=:order&orderby=:orderby`
+GET `/pba/v1/attachments/?category=:slug&limit=:limit&page=:page&order=:order&orderby=:orderby`
 
 `:slug`: 可选，category名称
 `:limit`: 可选，获得条数，默认为5，-1为不限制
@@ -88,7 +88,7 @@ Response Body:
 
 获取天气
 ---
-GET `/jddj/v1/weather`
+GET `/pba/v1/weather`
 
 Response Body: 
 ```json
@@ -102,7 +102,7 @@ Response Body:
 
 获取党员报到人数
 ---
-GET `/jddj/v1/sign-in-member-count`
+GET `/pba/v1/sign-in-member-count`
 
 Response Body: 
 ```json
@@ -113,7 +113,7 @@ Response Body:
 
 党员报到
 ---
-POST `/jddj/v1/sign-in`
+POST `/pba/v1/sign-in`
 
 Request Body:
 ```json
@@ -146,7 +146,7 @@ Response Body:
 
 获取党史上的这一天
 ---
-GET `/jddj/v1/cpc-review/:dateType/:mm-:dd`
+GET `/pba/v1/cpc-review/:dateType/:mm-:dd`
 
 Response Body: 
 ```json
@@ -157,7 +157,7 @@ Response Body:
 
 获取纪念日人数和占比
 ---
-GET `jddj/v1/user-count/:dateType/:mm/:dd`
+GET `pba/v1/user-count/:dateType/:mm/:dd`
 
 `:dateType`: birth 生日 | enroll 入党日 | memo 纪念日
 
@@ -174,7 +174,7 @@ Response Body:
 
 获取党史上的一天参与人数
 ---
-GET `jddj/v1/user-count`
+GET `pba/v1/user-count`
 
 Response Body: 
 ```json
@@ -185,7 +185,7 @@ Response Body:
 
 获取党建声音列表
 ---
-GET `jddj/v1/speeches/:speechType?page=:page&limit=:limit`
+GET `pba/v1/speeches/:speechType?page=:page&limit=:limit`
 
 `:limit`: 获得条数，默认为5，-1为不限制
 `:page`: 页码
@@ -204,7 +204,7 @@ Response Body:
 
 上传党建声音
 ---
-POST `jddj/v1/speeches/:speechType`
+POST `pba/v1/speeches/:speechType`
 
 - `:speechType`: movie|talk
 
@@ -224,7 +224,7 @@ Response Body:
 
 更新党建声音作者信息
 ---
-POST|PUT|PATCH `jddj/v1/speeches/:speechId`
+POST|PUT|PATCH `pba/v1/speeches/:speechId`
 
 - `:speechId`: 党建声音ID
 
@@ -251,7 +251,7 @@ Response Body:
 
 获得党建声音
 ---
-GET `jddj/v1/speeches/:id`
+GET `pba/v1/speeches/:id`
 
 Response Body: 
 ```json
@@ -267,7 +267,7 @@ Response Body:
 
 上传座右铭
 ---
-POST `jddj/v1/mottoes`
+POST `pba/v1/mottoes`
 
 Request Body: (form-data)
 - text
@@ -286,7 +286,7 @@ Response Body:
 
 获得座右铭
 ---
-GET `jddj/v1/mottoes/:id`
+GET `pba/v1/mottoes/:id`
 
 Response Body: 
 ```json
@@ -300,7 +300,7 @@ Response Body:
 
 获得座右铭列表
 ---
-GET `jddj/v1/mottoes?page=:page&limit=:limit`
+GET `pba/v1/mottoes?page=:page&limit=:limit`
 
 Response Body: 
 ```json
@@ -314,7 +314,7 @@ Response Body:
 
 下载党建地图信息
 ---
-GET `jddj/v1/spots`
+GET `pba/v1/spots`
 
 Response Body: 
 ```json
@@ -337,7 +337,7 @@ Response Body:
 
 获得党建地图配置
 ---
-GET `jddj/v1/spots/config`
+GET `pba/v1/spots/config`
 
 Response Body: 
 ```json
@@ -351,7 +351,7 @@ Response Body:
 
 获得党建概况图片
 ---
-GET `jddj/v1/intro`
+GET `pba/v1/intro`
 
 Response Body: 
 ```json
@@ -363,7 +363,7 @@ Response Body:
 
 获得场馆/房间列表
 ---
-GET `jddj/v1/rooms`
+GET `pba/v1/rooms`
 
 Response Body:
 ```json
@@ -379,7 +379,7 @@ Response Body:
 
 获得群团组织
 ---
-GET `jddj/v1/organizations`
+GET `pba/v1/organizations`
 
 Response Body:
 ```json

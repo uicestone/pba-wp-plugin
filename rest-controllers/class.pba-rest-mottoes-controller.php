@@ -3,7 +3,7 @@
 class PBA_REST_Motto_Controller extends WP_REST_Controller {
 
 	public function __construct() {
-		$this->namespace = 'jddj/v1';
+		$this->namespace = 'pba/v1';
 		$this->rest_base = 'mottoes';
 	}
 

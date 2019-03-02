@@ -3,7 +3,7 @@
 class PBA_REST_Misc_Controller extends WP_REST_Controller {
 
 	public function __construct() {
-		$this->namespace = 'jddj/v1';
+		$this->namespace = 'pba/v1';
 	}
 
 	public static $user_fields = array('name', 'unit', 'organization', 'sex', 'residence', 'speciality', 'id_card' => 'idCard', 'mobile');
