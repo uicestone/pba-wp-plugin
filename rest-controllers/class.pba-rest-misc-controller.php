@@ -40,18 +40,24 @@ class PBA_REST_Misc_Controller extends WP_REST_Controller {
 	 */
 	public static function get_weather() {
 
-		$key = constant('SENI_KEY');
-		$location = 'shanghai';
-		$language = 'zh-Hans';
-		$unit = 'c';
+		$weather = json_decode(get_option('weather'));
 
-		$query = compact('location', 'key', 'language', 'unit');
+		if (!$weather) {
+			$key = constant('SENI_KEY');
+			$location = 'shanghai';
+			$language = 'zh-Hans';
+			$unit = 'c';
 
-		$url = 'https://api.seniverse.com/v3/weather/now.json?' . http_build_query($query);
+			$query = compact('location', 'key', 'language', 'unit');
 
-		$result = json_decode(file_get_contents($url));
+			$url = 'https://api.seniverse.com/v3/weather/now.json?' . http_build_query($query);
 
-		$weather_now = $result->results[0]->now;
+			$weather = json_decode(file_get_contents($url));
+			$weather->expires_at = time() + 60;
+			update_option('weather', json_encode($weather));
+		}
+
+		$weather_now = $weather->results[0]->now;
 		$weather_now->icon = 'https://s1.sencdn.com/web/icons/3d_50/' . $weather_now->code .'.png';
 
 		return rest_ensure_response($weather_now);
