@@ -191,6 +191,11 @@ class PBA_REST_Post_Controller extends WP_REST_Controller {
 			'updatedAt' => $post->post_modified
 		);
 
+		if ($post->post_name === 'home') {
+			$item['address'] = get_post_meta($post->ID, 'address', true);
+			$item['phone'] = get_post_meta($post->ID, 'phone', true);
+		}
+
 		if ($date = get_post_meta($post->ID, 'date', true)) {
 			$item['date'] = $date;
 		}
