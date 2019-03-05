@@ -62,6 +62,12 @@ class PBA_REST_Misc_Controller extends WP_REST_Controller {
 			)
 		) );
 
+		register_rest_route( $this->namespace, '/my-motto', array(
+			array(
+				'methods' => WP_REST_Server::READABLE,
+				'callback' => array( $this, 'get_my_motto' ),
+			)
+		) );
 		register_rest_route( $this->namespace, '/intro', array(
 			array(
 				'methods' => WP_REST_Server::READABLE,
@@ -326,6 +332,39 @@ class PBA_REST_Misc_Controller extends WP_REST_Controller {
 			}, $posts);
 
 			return rest_ensure_response($speeches);
+
+		}
+	}
+
+	/**
+	 * My motto data
+	 *
+	 * @param WP_REST_Request $request
+	 * @return WP_Error|WP_REST_Response
+	 */
+	public static function get_my_motto( $request )
+	{
+		$token = $_SERVER['HTTP_AUTHORIZATION'];
+		$token_parts = explode(' ', $token);
+		$mobile = $token_parts[0];
+		$hash = $token_parts[1];
+		if ($hash === sha1($mobile . '-' . NONCE_KEY)) {
+
+			$posts = get_posts(array('post_type' => 'motto', 'posts_per_page' => -1, 'meta_query' => array(
+				array('key' => 'author_mobile', 'value' => $mobile)
+			)));
+
+			$mottos = array_map(function (WP_Post $post) {
+				$motto = array(
+					'id' => $post->ID,
+					'text' => $post->post_content,
+					'imageUrl' => get_post_meta($post->ID, 'image_url', true),
+					'authorName' => get_post_meta($post->ID, 'author_name', true),
+				);
+				return (object) $motto;
+			}, $posts);
+
+			return rest_ensure_response($mottos);
 
 		}
 	}
