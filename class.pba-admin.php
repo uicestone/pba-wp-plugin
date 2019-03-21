@@ -14,6 +14,7 @@ class PBA_Admin {
 		register_taxonomy_for_object_type('post_tag', 'attachment');
 
 		add_post_type_support('attachment', '');
+		add_post_type_support('page', 'excerpt');
 
 		register_post_type('speech', array(
 			'label' => '党建声音',
