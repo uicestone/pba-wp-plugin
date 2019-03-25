@@ -35,7 +35,7 @@ class PBA_REST_Event_Controller extends WP_REST_Controller {
 			'orderby' => 'orderby'
 		);
 
-		$parameters = array('post_type' => 'event');
+		$parameters = array('post_type' => 'event', 'posts_per_page' => -1);
 
 		foreach ($parameter_mappings as $param => $mapped_param) {
 			if ($request->get_param($param) != null) {
