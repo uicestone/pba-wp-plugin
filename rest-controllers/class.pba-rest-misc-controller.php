@@ -42,7 +42,7 @@ class PBA_REST_Misc_Controller extends WP_REST_Controller {
 
 		$weather = json_decode(get_option('weather'));
 
-		if (!$weather) {
+		if (!$weather || $weather->expires_at < time()) {
 			$key = constant('SENI_KEY');
 			$location = 'shanghai';
 			$language = 'zh-Hans';
