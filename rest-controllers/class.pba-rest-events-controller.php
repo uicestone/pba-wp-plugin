@@ -43,7 +43,18 @@ class PBA_REST_Event_Controller extends WP_REST_Controller {
 			}
 		}
 
+		$top_posts = get_posts(array('post_type' => 'event', 'meta_key' => 'top', 'meta_value' => '1', 'posts_per_page' => -1));
 		$posts = get_posts($parameters);
+		$posts = array_values(array_filter($posts, function(WP_Post $post) use ($top_posts) {
+			$top_post_ids = array_column($top_posts, 'ID');
+			if (in_array($post->ID, $top_post_ids)) {
+				return false;
+			} else {
+				return true;
+			}
+		}));
+
+		$posts = array_merge($top_posts, $posts);
 
 		if (!$request->get_param('page')) {
 			$parameters_all = $parameters;
