@@ -122,6 +122,26 @@ class PBA_REST_Appointment_Controller extends WP_REST_Controller {
 			add_post_meta($appointment_id, $key, $value);
 		}
 
+		if (function_exists('aliyun_send_sms')) {
+			if ($body['type'] === '活动报名') {
+				$event = get_the_title($body['event_id']);
+			} elseif ($body['type'] === '参观预约') {
+				$event = '参观党建服务中心';
+			} elseif ($body['type'] === '场馆预约') {
+				$event = $body['会议室/培训室'];
+			}
+
+			$result = aliyun_send_sms(ALIYUN_SMS_MOBILE_EVENT_NOTIFY, ALIYUN_SMS_CODE_EVENT_NOTIFY, array(
+				'type' => $body['type'],
+				'name' => $body['联系人'],
+				'phone' => $body['联系电话'],
+				'event' => $event
+			));
+
+		} else {
+			error_log('SMS send failed, function aliyun_send_sms not exists.');
+		}
+
 		return rest_ensure_response(array(
 			'id' => $appointment_id,
 			'type' => get_post_meta($appointment_id, 'type', true)

@@ -196,9 +196,10 @@ class PBA_REST_Misc_Controller extends WP_REST_Controller {
 			}
 			error_log('[DEBUG] SMS code is ' . $code);
 			if (function_exists('aliyun_send_mobile_code')) {
-				error_log('Fail to send SMS, function aliyun_send_mobile_code not exists.');
 				$result = aliyun_send_mobile_code($mobile, $code);
 				return rest_ensure_response(array('message' => '短信验证码已发送'));
+			} else {
+				error_log('Fail to send SMS, function aliyun_send_mobile_code not exists.');
 			}
 			return rest_ensure_response(new WP_Error(500, '短信服务不可用'));
 		}
