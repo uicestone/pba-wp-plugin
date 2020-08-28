@@ -117,6 +117,9 @@ class PBA_Admin {
 			'map_meta_cap' => true,
 			'menu_icon' => 'dashicons-clock'
 		));
+
+		add_filter( 'big_image_size_threshold', '__return_false' );
+
 	}
 
 	protected static function manage_admin_columns ()
