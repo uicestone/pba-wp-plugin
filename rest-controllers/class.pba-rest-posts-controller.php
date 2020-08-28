@@ -3,7 +3,7 @@
 class PBA_REST_Post_Controller extends WP_REST_Controller {
 
 	public function __construct() {
-		$this->namespace = 'jddj/v1';
+		$this->namespace = 'pba';
 		$this->rest_base = 'posts';
 	}
 
@@ -51,36 +51,19 @@ class PBA_REST_Post_Controller extends WP_REST_Controller {
 			}
 		}
 
-		if ($month = $request->get_param('month')) {
-			$parameters['meta_query'] = array(
-				array('key' => 'date', 'compare' => 'LIKE', 'value' => $month)
-			);
-		}
+		$posts = get_posts($parameters);
 
-		if ($gongyi = $request->get_param('gongyi')) {
-
-			$posts = get_field('events', $gongyi);
-
-		} else {
-			$posts = get_posts($parameters);
-
-			$parameters_all = $parameters;
-			$parameters_all['posts_per_page'] = -1;
-			unset($parameters_all['paged']);
-			$posts_all = get_posts($parameters_all);
-			$posts_all_count = count($posts_all);
-			header('X-WP-TotalPages: ' . ceil($posts_all_count / $parameters['posts_per_page']));
-		}
+		$parameters_all = $parameters;
+		$parameters_all['posts_per_page'] = -1;
+		unset($parameters_all['paged']);
+		$posts_all = get_posts($parameters_all);
+		$posts_all_count = count($posts_all);
+		header('X-WP-TotalPages: ' . ceil($posts_all_count / $parameters['posts_per_page']));
 
 
 		$items = array_map(function (WP_Post $post) {
 			$author = get_user_by('ID', $post->post_author);
-			$town_category = get_category_by_slug('town');
-			$town = null;
-			$categories = array_map(function ($category) use (&$town, $town_category) {
-				if ($category->parent === $town_category->cat_ID) {
-					$town = $category->name;
-				}
+			$categories = array_map(function ($category) {
 				return $category->name;
 			}, get_the_category($post->ID));
 
@@ -109,7 +92,6 @@ class PBA_REST_Post_Controller extends WP_REST_Controller {
 				'slug' => $post->post_name,
 				'posterUrl' => $posterUrl,
 				'categories' => $categories,
-				'town' => $town,
 				'author' => (object) array(
 					'id' => $author->ID,
 					'name' => $author->display_name,
@@ -118,10 +100,6 @@ class PBA_REST_Post_Controller extends WP_REST_Controller {
 				'createdAt' => $post->post_date,
 				'updatedAt' => $post->post_modified
 			);
-
-			if ($date = get_post_meta($post->ID, 'date', true)) {
-				$item['date'] = $date;
-			}
 
 			return (object) $item;
 
@@ -147,12 +125,7 @@ class PBA_REST_Post_Controller extends WP_REST_Controller {
 		}
 
 		$author = get_user_by('ID', $post->post_author);
-		$town_category = get_category_by_slug('town');
-		$town = null;
-		$categories = array_map(function ($category) use (&$town, $town_category) {
-			if ($category->parent === $town_category->cat_ID) {
-				$town = $category->name;
-			}
+		$categories = array_map(function ($category) {
 			return $category->name;
 		}, get_the_category($post->ID));
 
@@ -181,7 +154,6 @@ class PBA_REST_Post_Controller extends WP_REST_Controller {
 			'slug' => $post->post_name,
 			'posterUrl' => $posterUrl,
 			'categories' => $categories,
-			'town' => $town,
 			'author' => (object) array(
 				'id' => $author->ID,
 				'name' => $author->display_name,
@@ -190,10 +162,6 @@ class PBA_REST_Post_Controller extends WP_REST_Controller {
 			'createdAt' => $post->post_date,
 			'updatedAt' => $post->post_modified
 		);
-
-		if ($date = get_post_meta($post->ID, 'date', true)) {
-			$item['date'] = $date;
-		}
 
 		return rest_ensure_response($item);
 
