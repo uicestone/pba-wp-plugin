@@ -146,4 +146,39 @@ class PBA_CLI extends WP_CLI_Command {
 			WP_CLI::line( 'Location saved ' . $latitude . ',' . $longitude . ' ' . $spot->ID . ' ' . $spot->post_title . '.');
 		}
 	}
+
+	/**
+	 * Attach 4shi images.
+	 *
+	 * ## EXAMPLES
+	 *
+	 *     wp pba attach_4shi_images
+	 *
+	 */
+	public function attach_4shi_images() {
+		$sishi_posts = get_posts(['category_name'=>'sishi', 'posts_per_page'=>-1]);
+		foreach ($sishi_posts as $sishi_post) {
+			WP_CLI::line('Sishi post: ' . $sishi_post->post_title);
+			$sishi_post->post_content = preg_replace("/<img.*>\n*/", "", $sishi_post->post_content);
+			$attach_posts = get_posts(['post_type'=>'attachment','post_title'=>['s'=>$sishi_post->post_title]]);
+			global $wpdb;
+			$attach_posts = $wpdb->get_results("SELECT * FROM {$wpdb->posts} WHERE post_title LIKE '{$sishi_post->post_title}%' AND post_type = 'attachment' ORDER BY post_title ASC");
+			foreach ($attach_posts as $attach_post) {
+				// WP_CLI::line('Attach post: ' . $attach_post->guid);
+				$tags = array_map(function($term){return $term->slug;},get_the_tags($attach_post->ID) ?: []);
+				WP_CLI::line();
+				$img = '<img src="' . $attach_post->guid . '" class="' . implode(" ", $tags) . '" />';
+				$sishi_post->post_content .= ("\n" . $img);
+			}
+			$sishi_post->post_content = preg_replace("/(<img.*?>)\n/", "$1\n\n", $sishi_post->post_content);
+			// $sishi_post->post_content = preg_replace("/(预约电话[\s\S]*开放时间.*\n)/", "<ul>\n$1</ul>", $sishi_post->post_content);
+			// $sishi_post->post_content = preg_replace("/\n(预约电话：.*)\n/", "\n<li>$1</li>", $sishi_post->post_content);
+			// $sishi_post->post_content = preg_replace("/\n(联系人：.*)\n/", "\n<li>$1</li>", $sishi_post->post_content);
+			// $sishi_post->post_content = preg_replace("/\n(地址：.*)\n/", "\n<li>$1</li>", $sishi_post->post_content);
+			// $sishi_post->post_content = preg_replace("/\n(开放时间：.*\n)/", "\n<li>$1</li>", $sishi_post->post_content);
+			WP_CLI::line($sishi_post->post_content);
+			wp_update_post($sishi_post);
+		}
+		// WP_CLI::line( 'Inserted ' . $type . ': ' . $name . ' to post ' . $post_id . '.');
+	}
 }
