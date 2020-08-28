@@ -1,8 +1,8 @@
 <?php
 /*
-Plugin Name: 党建中心数据和后台管理
+Plugin Name: Simple RESTful Post
 Plugin URI: https://www.hbird.com.cn/
-Description: 提供党建中心后台管理和RESTful API数据接口
+Description: Provide simple RESTful post api
 Version: 1.0.0
 Author: Uice Lu
 Author URI: https://cecilia.uice.lu
