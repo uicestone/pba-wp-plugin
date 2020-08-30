@@ -73,7 +73,7 @@ class PBA_REST_Post_Controller extends WP_REST_Controller {
 		}
 
 
-		$items = array_map(function (WP_Post $post) {
+		$items = array_map(function (WP_Post $post) use($request) {
 			$author = get_user_by('ID', $post->post_author);
 			$town_category = get_category_by_slug('town');
 			$town = null;
@@ -83,6 +83,18 @@ class PBA_REST_Post_Controller extends WP_REST_Controller {
 				}
 				return $category->name;
 			}, get_the_category($post->ID));
+
+			if ($request->get_param('standaloneContentImages')) {
+				preg_match_all('/<img.*>/', $post->post_content, $matches);
+				// exclude 'qr' image
+				$images = array_map(function($img){
+					preg_match('/src="(.*)"/', $img, $matches);
+					return $matches[1];
+				},array_values(array_filter($matches[0], function($match){
+					return !preg_match('/class=".*?qr.*?"/', $match);
+				})));
+				$post->post_content = preg_replace('/<img.*>\n?/g', '', $post->post_content);
+			}
 
 			$content = do_shortcode(wptexturize(wpautop($post->post_content)));
 			$posterUrl = get_the_post_thumbnail_url($post->ID) ?: null;
@@ -118,6 +130,10 @@ class PBA_REST_Post_Controller extends WP_REST_Controller {
 				'createdAt' => $post->post_date,
 				'updatedAt' => $post->post_modified
 			);
+
+			if (isset($images)) {
+				$item['images'] = $images;
+			}
 
 			if ($date = get_post_meta($post->ID, 'date', true)) {
 				$item['date'] = $date;
