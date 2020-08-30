@@ -93,7 +93,7 @@ class PBA_REST_Post_Controller extends WP_REST_Controller {
 				},array_values(array_filter($matches[0], function($match){
 					return !preg_match('/class=".*?qr.*?"/', $match);
 				})));
-				$post->post_content = preg_replace('/<img.*>\n?/g', '', $post->post_content);
+				$post->post_content = preg_replace('/<img.*>\n?/', '', $post->post_content);
 			}
 
 			$content = do_shortcode(wptexturize(wpautop($post->post_content)));
