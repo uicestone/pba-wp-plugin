@@ -88,7 +88,7 @@ class PBA_REST_Post_Controller extends WP_REST_Controller {
 				preg_match_all('/<img.*>/', $post->post_content, $matches);
 				// exclude 'qr' image
 				$images = array_map(function($img){
-					preg_match('/src="(.*)"/', $img, $matches);
+					preg_match('/src="(.*?)"/', $img, $matches);
 					return $matches[1];
 				},array_values(array_filter($matches[0], function($match){
 					return !preg_match('/class=".*?qr.*?"/', $match);
